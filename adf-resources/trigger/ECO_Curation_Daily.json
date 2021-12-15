@@ -1,0 +1,39 @@
+{
+	"name": "ECO_Curation_Daily",
+	"properties": {
+		"description": "This trigger is set up to schedule data loading for ecommerce sales and stock. There are three tables that are going to be loaded ['ECOMMERCE_ALFACART_SELLOUT.xlsx', 'ECOMMERCE_BRICKANDCLICK_SELLOUT_STOCK.xlsx', 'ECOMMERCE_SELLOUT_STOCK.xlsx']. The data was taken from raw container /raw/ts-ecommerce/SALES/ into curation container. The job supposed to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_list": "['ECOMMERCE_ALFACART_SELLOUT.xlsx', 'ECOMMERCE_BRICKANDCLICK_SELLOUT_STOCK.xlsx', 'ECOMMERCE_SELLOUT_STOCK.xlsx']",
+					"blob_path": "/raw/ts-ecommerce/SALES/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-29T06:40:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						40
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

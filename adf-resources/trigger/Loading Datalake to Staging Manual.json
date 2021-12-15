@@ -1,0 +1,65 @@
+{
+	"name": "Loading Datalake to Staging Manual",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"Manual",
+			"MMKA"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "STAGING",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['Mapping_Brand_To_MS.xls', 'Mapping_SKU_Core.xlsx', 'Mapping_SellPo_To_DC.xls']"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "IDN_STG_TSM",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['Mapping_Brand_To_MS.xls', 'Mapping_SKU_Core.xlsx', 'Mapping_SellPo_To_DC.xls']",
+					"source_system_trigram": "MNL"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-02T01:14:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}

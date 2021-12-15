@@ -1,0 +1,37 @@
+{
+	"name": "AutoCore_MappingReferences",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "AutomaticStagingToCore",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"load_mode": "latest",
+					"payload": "[{'environment': 'OLD','source_database': 'DEV_SFE','source_schema': 'STAGING','source_table': 'RAW_DIM_DISTRIBUTOR_AREA_TYPE','target_database': 'DEV_SFE','target_schema': 'CORE','target_table': 'DIM_DISTRIBUTOR_AREA_TYPE','primary_keys': ['Distributor_Area_Type_Key']}, {'environment': 'OLD','source_database': 'DEV_SFE','source_schema': 'STAGING','source_table': 'RAW_PRICE','target_database': 'DEV_SFE','target_schema': 'CORE','target_table': 'DIM_PRICE','primary_keys': ['RowId']}, {'environment': 'OLD','source_database': 'DEV_SFE','source_schema': 'STAGING','source_table': 'RAW_UOMCONVERSION','target_database': 'DEV_SFE','target_schema': 'CORE','target_table': 'DIM_UOMCONVERSION','primary_keys': ['RowId']}, {'environment': 'OLD','source_database': 'DEV_SFE','source_schema': 'STAGING','source_table': 'RAW_MAPPINGCUSTOMERDISTRIBUTOR','target_database': 'DEV_SFE','target_schema': 'CORE','target_table': 'DIM_MAPPINGCUSTOMERDISTRIBUTOR','primary_keys': ['RowId']}, {'environment': 'OLD','source_database': 'DEV_SFE','source_schema': 'STAGING','source_table': 'RAW_MAPPINGPRODUCT','target_database': 'DEV_SFE','target_schema': 'CORE','target_table': 'DIM_MAPPINGPRODUCT','primary_keys': ['RowId']}, {'environment': 'DEV','source_database': 'DEV_IDN','source_schema': 'IDN_STG_TSM','source_table': 'S_BTZ_DIM_DISTRIBUTOR_AREA_TYPE','target_database': 'DEV_IDN','target_schema': 'IDN_DMT_SFE','target_table': 'R_BTZ_GEO_DAT','primary_keys': ['Distributor_Area_Type_Key']}, {'environment': 'DEV','source_database': 'DEV_IDN','source_schema': 'IDN_STG_TSM','source_table': 'S_BTZ_PRICE','target_database': 'DEV_IDN','target_schema': 'IDN_DMT_SFE','target_table': 'R_BTZ_OTH_PRI','primary_keys': ['RowId']}, {'environment': 'DEV','source_database': 'DEV_IDN','source_schema': 'IDN_STG_TSM','source_table': 'S_BTZ_UOMCONVERSION','target_database': 'DEV_IDN','target_schema': 'IDN_DMT_SFE','target_table': 'R_BTZ_OTH_UOM','primary_keys': ['RowId']}, {'environment': 'DEV','source_database': 'DEV_IDN','source_schema': 'IDN_STG_TSM','source_table': 'S_BTZ_MAPPINGCUSTOMERDISTRIBUTOR','target_database': 'DEV_IDN','target_schema': 'IDN_DMT_SFE','target_table': 'R_BTZ_CUS_MCD','primary_keys': ['RowId']}, {'environment': 'DEV','source_database': 'DEV_IDN','source_schema': 'IDN_STG_TSM','source_table': 'S_BTZ_MAPPINGPRODUCT','target_database': 'DEV_IDN','target_schema': 'IDN_DMT_SFE','target_table': 'R_BTZ_MLK_MPD','primary_keys': ['RowId']}]"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-07-23T05:01:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						1
+					]
+				}
+			}
+		}
+	}
+}

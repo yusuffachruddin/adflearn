@@ -1,0 +1,36 @@
+{
+	"name": "SFE_DW_MMKA_SingleQuery",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "SFE_SingleQueryCoreLoading",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"schema": "CORE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-09-10T07:43:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						40
+					],
+					"hours": [
+						1
+					]
+				}
+			}
+		}
+	}
+}

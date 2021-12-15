@@ -1,0 +1,71 @@
+{
+	"name": "AutomaticStagingToCore_smart",
+	"properties": {
+		"activities": [
+			{
+				"name": "Automatic Staging to Core",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Automatic Staging to Core",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"load_mode": {
+							"value": "@pipeline().parameters.load_mode",
+							"type": "Expression"
+						},
+						"payload": {
+							"value": "@pipeline().parameters.payload",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"load_mode": {
+				"type": "string",
+				"defaultValue": "latest"
+			},
+			"payload": {
+				"type": "string",
+				"defaultValue": "[{'source_schema': 'STAGING', 'source_table': 'RAW_PRICE', 'target_schema': 'CORE', 'target_table': 'DIM_PRICE', 'primary_keys': ['RowId']}, {'source_schema': 'STAGING', 'source_table': 'RAW_UOMCONVERSION', 'target_schema': 'CORE', 'target_table': 'DIM_UOMCONVERSION', 'primary_keys': ['RowId']}, {'source_schema': 'STAGING', 'source_table': 'RAW_MAPPINGCUSTOMERDISTRIBUTOR', 'target_schema': 'CORE', 'target_table': 'DIM_MAPPINGCUSTOMERDISTRIBUTOR', 'primary_keys': ['RowId']}, {'source_schema': 'STAGING', 'source_table': 'RAW_MAPPINGPRODUCT', 'target_schema': 'CORE', 'target_table': 'DIM_MAPPINGPRODUCT', 'primary_keys': ['RowId']}]"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			}
+		},
+		"folder": {
+			"name": "smart_blitz"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-14T06:19:18Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

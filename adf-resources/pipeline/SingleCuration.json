@@ -1,0 +1,105 @@
+{
+	"name": "SingleCuration",
+	"properties": {
+		"description": "Single curation takes no separated source container in ADLS between full and daily ingestion",
+		"activities": [
+			{
+				"name": "Single Curation",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Single Curation",
+					"baseParameters": {
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"database": {
+							"value": "@pipeline().parameters.database",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@pipeline().parameters.table_list",
+							"type": "Expression"
+						},
+						"directory": {
+							"value": "@pipeline().parameters.directory",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"sf_credential": {
+							"value": "@variables('sf_credential')",
+							"type": "Expression"
+						},
+						"delimiter": {
+							"value": "@pipeline().parameters.delimiter",
+							"type": "Expression"
+						},
+						"input_date": {
+							"value": "@formatDateTime(subtractFromTime(addhours(utcnow(), 7), 1, 'Day'),'yyyyMMdd')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"container": {
+				"type": "string",
+				"defaultValue": "raw"
+			},
+			"database": {
+				"type": "string",
+				"defaultValue": "ts-mmka"
+			},
+			"table_list": {
+				"type": "string",
+				"defaultValue": "['dboMappingProduct.csv']"
+			},
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"directory": {
+				"type": "string",
+				"defaultValue": "/ts-mmka/mapping-references/full/"
+			},
+			"delimiter": {
+				"type": "string",
+				"defaultValue": ","
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"sf_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

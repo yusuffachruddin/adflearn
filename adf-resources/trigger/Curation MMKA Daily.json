@@ -1,0 +1,70 @@
+{
+	"name": "Curation MMKA Daily",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"ts-mmka",
+			"manuals"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "InitialDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"container": "raw",
+					"database": "ts-mmka",
+					"use_case": "dss-sfe",
+					"table_list": "['dboDim_Area_GeoCity.csv', 'dboDim_Area.csv', 'dboDim_Brand.csv', 'dboDim_Customer_Distributor.csv', 'dboDim_Distributor.csv', 'dboDim_Period.csv', 'dboDim_Product.csv', 'dboDim_Type.csv', 'dboFact_Sales_Target_SS.csv', 'dboFact_Stock_Retailer_SellingIn_Return.csv', 'dboFact_Stock_Retailer_ServiceLevel.csv', 'dboFact_Stock_Retailer.csv', 'dboDim_Distributor_Area_Type.csv', 'dboFact_Purchase_Order.csv', 'dboFact_Return.csv', 'dboFact_Sales.csv', 'dboFact_Stock.csv']",
+					"full_dir": "/ts-mmka/fact-master-references/full/",
+					"daily_dir": "/ts-mmka/fact-master-references/daily/"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "IncrementalDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"container": "raw",
+					"database": "ts-mmka",
+					"use_case": "dss-sfe",
+					"table_list": "['dboDim_Area_GeoCity.csv', 'dboDim_Area.csv', 'dboDim_Brand.csv', 'dboDim_Customer_Distributor.csv', 'dboDim_Distributor.csv', 'dboDim_Period.csv', 'dboDim_Product.csv', 'dboDim_Type.csv', 'dboFact_Sales_Target_SS.csv', 'dboFact_Stock_Retailer_SellingIn_Return.csv', 'dboFact_Stock_Retailer_ServiceLevel.csv', 'dboFact_Stock_Retailer.csv', 'dboDim_Distributor_Area_Type.csv', 'dboFact_Purchase_Order.csv', 'dboFact_Return.csv', 'dboFact_Sales.csv', 'dboFact_Stock.csv']",
+					"full_dir": "/ts-mmka/fact-master-references/full/",
+					"daily_dir": "/ts-mmka/fact-master-references/daily/"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "raw",
+					"table_list": "['Mapping_Brand_To_MS.xls', 'Mapping_SKU_Core.xlsx', 'Mapping_SellPo_To_DC.xls']",
+					"blob_path": "/raw/manual/sfe/MMKA/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-01T02:46:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						23
+					]
+				}
+			}
+		}
+	}
+}

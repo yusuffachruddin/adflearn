@@ -1,0 +1,36 @@
+{
+	"name": "IDN_DMT_SFE_SingleQueryLoading_Helper",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "IDN_DMT_SFE_SingleQueryCoreLoading_Helper_Table",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"schema": "IDN_DMT_SFE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-11-04T04:33:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						11
+					]
+				}
+			}
+		}
+	}
+}

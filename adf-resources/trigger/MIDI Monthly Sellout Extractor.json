@@ -1,0 +1,36 @@
+{
+	"name": "MIDI Monthly Sellout Extractor",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "SFE_SellOutExtractor",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mmka": "MIDI",
+					"report": "monthly"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-07-24T18:18:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						18
+					]
+				}
+			}
+		}
+	}
+}

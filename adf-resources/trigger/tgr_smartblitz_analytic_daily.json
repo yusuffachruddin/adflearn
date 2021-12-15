@@ -1,0 +1,17 @@
+{
+	"name": "tgr_smartblitz_analytic_daily",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 24,
+				"startTime": "2021-12-10T04:00:00",
+				"timeZone": "SE Asia Standard Time"
+			}
+		}
+	}
+}

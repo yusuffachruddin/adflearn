@@ -1,0 +1,133 @@
+{
+	"name": "Datamart_TS_LKA_PARETO",
+	"properties": {
+		"description": "Run query at Snowflake at once. Job running based on query to load LKA and PARETO data from manual upload sftp.",
+		"activities": [
+			{
+				"name": "TS_LKA_F_BTZ_SND_TTS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('TS_LKA_F_BTZ_SND_TTS')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksIDNSpoke",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "TS_PARETO_F_BTZ_SND_TTS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "TS_LKA_F_BTZ_SND_TTS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('TS_PARETO_F_BTZ_SND_TTS')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksIDNSpoke",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "IDN_DMT_SFE"
+			}
+		},
+		"variables": {
+			"rsa_private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"db_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			},
+			"TS_LKA_F_BTZ_SND_TTS": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tDEV_IDN.IDN_DMT_SFE.F_BTZ_SND_TTS dest  \t\tUSING ( WITH  CTE1(PERIOD, PROCESS_DATE, BARCODE, ACCOUNTGRUP, STORENAME, STORECODE, AREACODE) AS  ( SELECT \tCASE          WHEN LOWER(VALUE:periode::STRING) = 'nat' THEN 0::NUMBER(38,0)         WHEN LOWER(VALUE:periode::STRING) = 'nan' THEN 0::NUMBER(38,0)         WHEN LOWER(VALUE:periode::STRING) = '' THEN 0::NUMBER(38,0)         WHEN SPLIT_PART(value:periode::VARCHAR, ' ', 1) NOT LIKE '202%' THEN 0::NUMBER(38,0)         ELSE TO_NUMBER(TO_VARCHAR(CAST((VALUE:periode::VARCHAR) AS DATE),'YYYYMMDD'))     END PERIOD,     MAX(TO_NUMBER(VALUE:process_date::VARCHAR)) AS PROCESS_DATE, \tCASE \t\tWHEN LOWER(VALUE:barcode::STRING) = 'no barcode' THEN 0::NUMBER(38,0) \t\tWHEN LOWER(VALUE:barcode::STRING) = 'nan' THEN 0::NUMBER(38,0) \t\tWHEN LOWER(VALUE:barcode::STRING) = '' THEN 0::NUMBER(38,0) \t\tELSE VALUE:barcode::NUMBER(38,0) \tEND BARCODE, \tVALUE:account_grup::VARCHAR ACCOUNTGRUP, \tVALUE:storename::VARCHAR STORENAME,     VALUE:storecode::VARCHAR STORECODE, \tVALUE:areacode::VARCHAR AREACODE FROM \tDEV_IDN.IDN_STG_TSM.S_LKA_LKA_SELLOUT_STOCK WHERE \tPERIOD > 0 AND BARCODE  > 0 \tAND PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM DEV_IDN.IDN_STG_TSM.S_LKA_LKA_SELLOUT_STOCK)     AND (VALUE:process_datetime::STRING != 'NaT' OR VALUE:process_datetime::STRING != 'nan') GROUP BY \tPERIOD, BARCODE, ACCOUNTGRUP, STORENAME, STORECODE, AREACODE ORDER BY PROCESS_DATE  ),   CTE2(PERIOD, PROCESS_DATE, BARCODE, ACCOUNTGRUP, STORENAME, STORECODE, AREACODE,      PRODUCT_KEY, CUSTOMER_DISTRIBUTOR_KEY, \t AREA_KEY,       SKUCD, SOURCE_SYSTEM_CODE,      ORIGINAL_CODE,      CUSTOMER_DISTRIBUTOR_CODE     ) AS (  SELECT T1.*, \tT4.PRODUCT_KEY, \tTS1.CUSTOMER_DISTRIBUTOR_KEY, \tTT1.AREA_KEY,     T3.SKUCD, T4.SOURCE_SYSTEM_CODE,     TT1.ORIGINAL_CODE,     T2.CUSTOMER_DISTRIBUTOR_CODE   FROM CTE1 T1   LEFT JOIN (SELECT SUB_ACC_COD AS SUB_ACCOUNT_CODE, CUS_DIS_NAM AS CUSTOMER_DISTRIBUTOR_NAME, CUS_DIS_COD AS CUSTOMER_DISTRIBUTOR_CODE,              SUB_ACC_DES AS ACCOUNTGRUP              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_SND_CSD              WHERE SOU_SYS_COD = 6 AND DIS_DIS = '99999999'             ) T2 ON LOWER(CONCAT(T2.SUB_ACCOUNT_CODE, '-',T1.STORECODE)) = LOWER(T2.CUSTOMER_DISTRIBUTOR_CODE)   INNER JOIN (SELECT SKU AS SKUCD, MAT AS MATERIALCD, DIS AS DISTRIBUTORCD             FROM DEV_IDN.IDN_DWH.R_BTZ_MLK_MPD             WHERE DIS = '99999999') T3  ON LOWER(CONCAT(T2.SUB_ACCOUNT_CODE, '-', T1.BARCODE)) = LOWER(T3.MATERIALCD)  INNER JOIN (SELECT PRO_COD AS PRODUCT_CODE, PRO_KEY AS PRODUCT_KEY, SOU_SYS_COD AS SOURCE_SYSTEM_CODE              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PRD             WHERE SOU_SYS_COD = 6) T4  ON T3.SKUCD = T4.PRODUCT_CODE    INNER JOIN (SELECT CUS_DIS_COD AS CUSTOMER_DISTRIBUTOR_CODE, CUS_DIS_KEY AS CUSTOMER_DISTRIBUTOR_KEY              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_SND_CSD             WHERE SOU_SYS_COD = 6) TS1   ON LOWER(T2.CUSTOMER_DISTRIBUTOR_CODE) = LOWER(TS1.CUSTOMER_DISTRIBUTOR_CODE)    LEFT JOIN (SELECT ARE_KEY AS AREA_KEY, ORI_COD AS ORIGINAL_CODE              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_GEO_ARE             WHERE SOU_SYS_COD = 6) TT1  ON LOWER(CONCAT(T3.DISTRIBUTORCD, '-', T2.SUB_ACCOUNT_CODE, '-', T1.AREACODE)) = LOWER(TT1.ORIGINAL_CODE)   ),  CTE3(PERIOD, SKUCD, ORDER_DATE) AS ( SELECT T1.PERIOD, T1.SKUCD, MAX(T2.ORDER_DATE) AS MAX_DATE FROM CTE2 T1   LEFT JOIN (SELECT SKU AS SKUCD, NMO AS NMONTH, NYE AS NYEAR,               TO_NUMBER(CASE WHEN NMO::INTEGER < 10 THEN (NYE::STRING || '0' || NMO::STRING)                              ELSE NYE::STRING || NMO::STRING END) AS ORDER_DATE              FROM DEV_IDN.IDN_DWH.R_BTZ_PUR_PRC              WHERE DIS = '99999999' AND SKU != '') T2   ON T1.SKUCD = T2.SKUCD AND TO_NUMBER(LEFT(T1.Period, 6)) >= ORDER_DATE GROUP BY T1.PERIOD, T1.SKUCD )  SELECT T1.PERIOD AS PER_KEY, T1.PRODUCT_KEY AS PRO_KEY, T1.CUSTOMER_DISTRIBUTOR_KEY AS CUS_DIS_KEY, T1.AREA_KEY AS ARE_KEY,            5 AS TYP_KEY,           1493 AS DIS_KEY,             T.SELLOUT_PCS AS SAL_INP_PCS,             (T.SELLOUT_PCS/TC1.INPCS)*TC1.INCAR AS SAL_INC_CAR,             (T.SELLOUT_PCS/TC1.INPCS)*TC1.INKG AS SAL_INK_INK,            (T.SELLOUT_PCS/TC1.INPCS)*TC1.INTON AS SAL_INT_TON,            (T.SELLOUT_PCS/TC1.INPCS)*TC1.IN400GR AS SAL_IN4_400,            ((T.SELLOUT_PCS/TC1.INPCS)*TC1.INCAR)*T3.RBP AS SAL_INV_VAL,            T.SELLOUT_RP AS SAL_INR_REA_VAL,             T3.RBP AS PRI_RBP,             T1.SOURCE_SYSTEM_CODE AS SOU_SYS_COD,             UPLOAD_DATE AS UPL_DAT, T1.PROCESS_DATE AS PRO_DAT, CREATE_TIMESTAMP AS CRE_TIM,             UPDATE_TIMESTAMP AS UPD_TIM, PROCESS_DATETIME AS PRO_ATE      FROM CTE2 T1       LEFT JOIN (SELECT * FROM CTE3) T2 ON T1.SKUCD = T2.SKUCD LEFT JOIN (SELECT SKU AS SKUCD, TO_NUMBER(CASE WHEN NMO::INTEGER < 10 THEN (NYE::STRING || '0' || NMO::STRING)                                            ELSE NYE::STRING || NMO::STRING END) AS ORDER_DATE,            RBP            FROM DEV_IDN.IDN_DWH.R_BTZ_PUR_PRC            WHERE DIS = '99999999' AND SKU != '') T3 ON T1.SKUCD = T3.SKUCD AND T2.ORDER_DATE = T3.ORDER_DATE     LEFT JOIN( \tSELECT         CASE              WHEN LOWER(VALUE:periode::STRING) = 'NaT' THEN 0::NUMBER(38,0) \t\t\tWHEN LOWER(VALUE:periode::STRING) = 'nan' THEN 0::NUMBER(38,0) \t\t\tWHEN LOWER(VALUE:periode::STRING) = '' THEN 0::NUMBER(38,0)             WHEN SPLIT_PART(value:periode::VARCHAR, ' ', 1) NOT LIKE '202%' THEN 0::NUMBER(38,0) \t\t\tELSE TO_NUMBER(TO_VARCHAR(CAST((VALUE:periode::VARCHAR) AS DATE),'YYYYMMDD')) \t\tEND PERIOD, \t\tCASE \t\t\tWHEN LOWER(VALUE:barcode::STRING) = 'no barcode' THEN 0::NUMBER(38,0) \t\t\tWHEN LOWER(VALUE:barcode::STRING) = 'nan' THEN 0::NUMBER(38,0) \t\t\tWHEN LOWER(VALUE:barcode::STRING) = '' THEN 0::NUMBER(38,0) \t\t\tELSE VALUE:barcode::NUMBER(38,0) \t\tEND BARCODE, \t\tVALUE:account_grup::VARCHAR ACCOUNTGRUP, \t\tVALUE:storename::VARCHAR STORENAME, \t\tVALUE:areacode::VARCHAR AREACODE, \t\tCASE \t\t\tWHEN LOWER(VALUE:sellout_pcs::STRING) = '-' THEN 0::NUMBER(38,0) \t\t\tWHEN LOWER(VALUE:sellout_pcs::STRING) = 'nan' THEN 0::NUMBER(38,0) \t\t\tWHEN LOWER(VALUE:sellout_pcs::STRING) = '' THEN 0::NUMBER(38,0) \t\t\tELSE VALUE:sellout_pcs::NUMBER(38,0) \t\tEND SELLOUT_PCS, \t\tCASE \t\t\tWHEN LOWER(VALUE:value_sell_out_rp::STRING) = '-' THEN 0::NUMBER(38,8) \t\t\tWHEN LOWER(VALUE:value_sell_out_rp::STRING) = 'nan' THEN 0::NUMBER(38,8) \t\t\tWHEN LOWER(VALUE:value_sell_out_rp::STRING) = '' THEN 0::NUMBER(38,8) \t\t\tELSE VALUE:value_sell_out_rp::NUMBER(38,8) \t\tEND SELLOUT_RP,          CAST($1:process_datetime AS TIMESTAMP_NTZ) UPLOAD_DATE, \t\tCAST($1:process_date AS VARCHAR) PROCESS_DATE2, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) CREATE_TIMESTAMP, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) UPDATE_TIMESTAMP, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME \tFROM \t\tDEV_IDN.IDN_STG_TSM.S_LKA_LKA_SELLOUT_STOCK   WHERE BARCODE > 0          AND PERIOD > 0         AND (VALUE:process_datetime::STRING != 'NaT' OR VALUE:process_datetime::STRING != 'nan')     ORDER BY PROCESS_DATE2     ) T  ON T1.PERIOD = T.PERIOD AND T1.BARCODE = T.BARCODE AND T1.ACCOUNTGRUP = T.ACCOUNTGRUP AND T1.STORENAME = T.STORENAME  LEFT JOIN ( \tSELECT SKU AS SKUCD, IN4_400 AS IN400GR, INC_CAR AS INCAR, INK_INK AS INKG, INP_PCS AS INPCS, INT_TON AS INTON \tFROM DEV_IDN.IDN_DWH.R_BTZ_OTH_UOM) TC1  ON T1.SKUCD = TC1.SKUCD  WHERE T.SELLOUT_PCS != 0  QUALIFY ROW_NUMBER() OVER (PARTITION BY PER_KEY, PRO_KEY, CUS_DIS_KEY, ARE_KEY, TYP_KEY, DIS_KEY ORDER BY PRO_ATE DESC) = 1   ) SOURCE ON dest.PER_KEY = source.PER_KEY AND dest.PRO_KEY = source.PRO_KEY AND dest.CUS_DIS_KEY = source.CUS_DIS_KEY AND dest.ARE_KEY = source.ARE_KEY AND dest.TYP_KEY = source.TYP_KEY AND dest.DIS_KEY = source.DIS_KEY AND  dest.SOU_SYS_COD = source.SOU_SYS_COD WHEN MATCHED THEN UPDATE SET dest.PER_KEY = source.PER_KEY, dest.PRO_KEY = source.PRO_KEY, dest.CUS_DIS_KEY = source.CUS_DIS_KEY, dest.ARE_KEY = source.ARE_KEY, dest.TYP_KEY = source.TYP_KEY, dest.DIS_KEY = source.DIS_KEY, dest.SAL_INP_PCS = source.SAL_INP_PCS, dest.SAL_INC_CAR = source.SAL_INC_CAR, dest.SAL_INK_INK = source.SAL_INK_INK, dest.SAL_INT_TON = source.SAL_INT_TON, dest.SAL_IN4_400 = source.SAL_IN4_400, dest.SAL_INV_VAL = source.SAL_INV_VAL, dest.SAL_INR_REA_VAL = source.SAL_INR_REA_VAL, dest.PRI_RBP = source.PRI_RBP, dest.SOU_SYS_COD = source.SOU_SYS_COD, dest.UPL_DAT = source.UPL_DAT, dest.PRO_DAT = source.PRO_DAT, dest.CRE_TIM = source.CRE_TIM, dest.UPD_TIM = source.UPD_TIM, dest.PRO_ATE = source.PRO_ATE WHEN NOT MATCHED THEN  INSERT( dest.PER_KEY, dest.PRO_KEY, dest.CUS_DIS_KEY, dest.ARE_KEY, dest.TYP_KEY, dest.DIS_KEY, dest.SAL_INP_PCS, dest.SAL_INC_CAR, dest.SAL_INK_INK, dest.SAL_INT_TON, dest.SAL_IN4_400, dest.SAL_INV_VAL, dest.SAL_INR_REA_VAL, dest.PRI_RBP, dest.SOU_SYS_COD, dest.UPL_DAT, dest.PRO_DAT, dest.CRE_TIM, dest.UPD_TIM, dest.PRO_ATE) VALUES ( source.PER_KEY, source.PRO_KEY, source.CUS_DIS_KEY, source.ARE_KEY, source.TYP_KEY, source.DIS_KEY, source.SAL_INP_PCS, source.SAL_INC_CAR, source.SAL_INK_INK, source.SAL_INT_TON, source.SAL_IN4_400, source.SAL_INV_VAL, source.SAL_INR_REA_VAL, source.PRI_RBP, source.SOU_SYS_COD, source.UPL_DAT, source.PRO_DAT, source.CRE_TIM, source.UPD_TIM, source.PRO_ATE);"
+			},
+			"TS_PARETO_F_BTZ_SND_TTS": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tDEV_IDN.IDN_DMT_SFE.F_BTZ_SND_TTS dest \t\tUSING ( WITH  CTE1(PERIOD, PROCESS_DATE, MATERIAL, BWCUSTOMER, SELLING_POINT) AS  ( SELECT \tCASE          WHEN LOWER(VALUE:period::STRING) = 'nat' THEN 0::NUMBER(38,0)         WHEN LOWER(VALUE:period::STRING) = 'nan' THEN 0::NUMBER(38,0)         WHEN LOWER(VALUE:period::STRING) = '' THEN 0::NUMBER(38,0)         WHEN SPLIT_PART(value:period::VARCHAR, ' ', 1) NOT LIKE '202%' THEN 0::NUMBER(38,0)         ELSE TO_VARCHAR(CAST((VALUE:period::VARCHAR) AS DATE),'YYYYMMDD')     END PERIOD,     MAX(TO_NUMBER(VALUE:process_date::VARCHAR)) AS PROCESS_DATE,     CASE WHEN LOWER(VALUE:material::STRING) = 'nan' THEN 0::NUMBER(38,0)     \t WHEN LOWER(VALUE:material::STRING) = 'nat' THEN 0::NUMBER(38,0)     \t WHEN LOWER(VALUE:material::STRING) = '' THEN 0::NUMBER(38,0)          ELSE VALUE:material::NUMBER(38,0)      END MATERIAL,     VALUE:bw_customer::VARCHAR BWCUSTOMER,      VALUE:selling_point::VARCHAR SELLING_POINT FROM DEV_IDN.IDN_STG_TSM.S_LKA_LKA_PARETO WHERE PERIOD > 0        AND PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM DEV_IDN.IDN_STG_TSM.S_LKA_LKA_PARETO)        AND        (VALUE:process_datetime::STRING != 'NaT' OR VALUE:process_datetime::STRING != 'nan') GROUP BY PERIOD, MATERIAL, BWCUSTOMER, SELLING_POINT ORDER BY PROCESS_DATE  ),  CTE2 (PERIOD, PROCESS_DATE, MATERIAL, BWCUSTOMER,SELLING_POINT,        SKUCD, DISTRIBUTORCD, MATERIALCD,      PRODUCT_CODE, PRODUCT_KEY, CUSTOMER_DISTRIBUTOR_KEY, \t AREA_KEY,        SOURCE_SYSTEM_CODE,      CUSTOMER_DISTRIBUTOR_CODE,        ORIGINAL_CODE, CONC      ) AS (    SELECT T1.*, T2.SKUCD, T2.DISTRIBUTORCD, T2.MATERIALCD, T3.PRODUCT_CODE, T3.PRODUCT_KEY, TS1.CUSTOMER_DISTRIBUTOR_KEY, \t TT1.AREA_KEY, T3.SOURCE_SYSTEM_CODE,   TS1.CUSTOMER_DISTRIBUTOR_CODE,   TT1. ORIGINAL_CODE, CONCAT(TRIM(T2.DISTRIBUTORCD), '-', TRIM(T1.SELLING_POINT)) AS CONC   FROM CTE1 T1    INNER JOIN (SELECT SKU AS SKUCD, MAT AS MATERIALCD, DIS AS DISTRIBUTORCD             FROM DEV_IDN.IDN_DWH.R_BTZ_MLK_MPD              WHERE DIS = '950014954' AND (SKU != 'nan' OR SKU != '')) T2  ON TRIM(LOWER(CONCAT(T2.DISTRIBUTORCD, '-', T1.MATERIAL))) = TRIM(LOWER(T2.MATERIALCD))    INNER JOIN (SELECT PRO_COD AS PRODUCT_CODE, PRO_KEY AS PRODUCT_KEY, SOU_SYS_COD AS SOURCE_SYSTEM_CODE              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PRD             WHERE SOU_SYS_COD = 6) T3 ON T2.SKUCD = T3.PRODUCT_CODE    INNER JOIN (SELECT CUS_DIS_COD AS CUSTOMER_DISTRIBUTOR_CODE, CUS_DIS_KEY AS CUSTOMER_DISTRIBUTOR_KEY              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_SND_CSD              WHERE SOU_SYS_COD = 6 AND DIS_DIS = '950014954') TS1  ON TRIM(LOWER(T1.BWCUSTOMER)) = TRIM(LOWER(TS1.CUSTOMER_DISTRIBUTOR_CODE))  LEFT JOIN (SELECT ARE_KEY AS AREA_KEY, ORI_COD AS ORIGINAL_CODE              FROM DEV_IDN.IDN_DMT_SFE.R_BTZ_GEO_ARE              WHERE SOU_SYS_COD = 6) TT1  ON LOWER(CONCAT(TRIM(T2.DISTRIBUTORCD), '-', TRIM(T1.SELLING_POINT))) = TRIM(LOWER(TT1.ORIGINAL_CODE))  ),   CTE3(PERIOD, SKUCD, ORDER_DATE) AS ( SELECT T1.PERIOD, T1.SKUCD, MAX(T2.ORDER_DATE) AS MAX_DATE FROM CTE2 T1   LEFT JOIN (SELECT SKU AS SKUCD, NMO AS NMONTH, NYE AS NYEAR,               TO_NUMBER(CASE WHEN NMO::INTEGER < 10 THEN (NYE::STRING || '0' || NMO::STRING)                              ELSE NYE::STRING || NMO::STRING END) AS ORDER_DATE              FROM DEV_IDN.IDN_DWH.R_BTZ_PUR_PRC              WHERE DIS = '950014954' AND SKU != '') T2   ON T1.SKUCD = T2.SKUCD AND TO_NUMBER(LEFT(T1.Period, 6)) >= ORDER_DATE GROUP BY T1.PERIOD, T1.SKUCD )  SELECT T1.PERIOD AS PER_KEY, T1.PRODUCT_KEY AS PRO_KEY, T1.CUSTOMER_DISTRIBUTOR_KEY AS CUS_DIS_KEY, T1.AREA_KEY AS ARE_KEY,             3 AS TYP_KEY, 1470 AS DIS_KEY,            (T.AVG_INTON/TC1.INTON)*TC1.INPCS AS SAL_INP_PCS,             (T.AVG_INTON/TC1.INTON)*TC1.INCAR AS SAL_INC_CAR,             (T.AVG_INTON/TC1.INTON)*TC1.INKG AS SAL_INK_INK,            T.AVG_INTON AS SAL_INT_TON,            (T.AVG_INTON/TC1.INTON)*TC1.IN400GR AS SAL_IN4_400,                      ((T.AVG_INTON/TC1.INTON)*TC1.INCAR)*T3.RBP AS SAL_INV_VAL,            T3.RBP AS PRI_RBP,             T1.SOURCE_SYSTEM_CODE AS SOU_SYS_COD,             UPLOAD_DATE AS UPL_DAT, T1.PROCESS_DATE AS PRO_DAT, CREATE_TIMESTAMP AS CRE_TIM,             UPDATE_TIMESTAMP AS UPD_TIM, PROCESS_DATETIME AS PRO_ATE      FROM CTE2 T1       LEFT JOIN (SELECT * FROM CTE3) T2 ON T1.SKUCD = T2.SKUCD LEFT JOIN (SELECT SKU AS SKUCD, TO_NUMBER(CASE WHEN NMO::INTEGER < 10 THEN (NYE::STRING || '0' || NMO::STRING)                                            ELSE NYE::STRING || NMO::STRING END) AS ORDER_DATE,            RBP            FROM DEV_IDN.IDN_DWH.R_BTZ_PUR_PRC            WHERE DIS = '950014954' AND SKU != '') T3 ON T1.SKUCD = T3.SKUCD AND T2.ORDER_DATE = T3.ORDER_DATE     LEFT JOIN( \tSELECT         CASE            WHEN LOWER(VALUE:period::STRING) = 'nat' THEN 0::NUMBER(38,0)           WHEN LOWER(VALUE:period::STRING) = 'nan' THEN 0::NUMBER(38,0)           WHEN SPLIT_PART(value:period::VARCHAR, ' ', 1) NOT LIKE '202%' THEN 0::NUMBER(38,0)         ELSE TO_NUMBER(TO_VARCHAR(CAST((VALUE:period::VARCHAR) AS DATE),'YYYYMMDD'))         END PERIOD,         CASE WHEN LOWER(VALUE:material::STRING) = 'nan' THEN 0::NUMBER(38,0)              ELSE VALUE:material::NUMBER(38,0)          END MATERIAL,         VALUE:bw_customer::VARCHAR BWCUSTOMER,          VALUE:selling_point::VARCHAR SELLING_POINT,         CASE \t\t\tWHEN LOWER(VALUE:avg13_net_ss_t::STRING) = '-' THEN 0::NUMBER(38,8) \t\t\tWHEN LOWER(VALUE:avg13_net_ss_t::STRING) = 'nan' THEN 0::NUMBER(38,8) \t\t\tWHEN LOWER(VALUE:avg13_net_ss_t::STRING) = '' THEN 0::NUMBER(38,8) \t\t\tELSE VALUE:avg13_net_ss_t::NUMBER(38,8) \t\tEND AVG_INTON,         CAST($1:process_datetime AS TIMESTAMP_NTZ) UPLOAD_DATE, \t\tCAST($1:process_date AS VARCHAR) PROCESS_DATE2, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) CREATE_TIMESTAMP, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) UPDATE_TIMESTAMP, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME \tFROM \t\tDEV_IDN.IDN_STG_TSM.S_LKA_LKA_PARETO   WHERE     (VALUE:period::VARCHAR != 'NaT' OR VALUE:period::VARCHAR != 'nan' OR VALUE:period::VARCHAR != '') AND           SPLIT_PART(value:period::VARCHAR, ' ', 1) like '202%'      ORDER BY PROCESS_DATE2     ) T  ON T1.PERIOD = T.PERIOD AND T1.MATERIAL = T.MATERIAL AND T1.BWCUSTOMER = T.BWCUSTOMER AND T1.SELLING_POINT = T.SELLING_POINT  LEFT JOIN ( \tSELECT SKU AS SKUCD, IN4_400 IN400GR, INC_CAR AS INCAR, INK_INK AS INKG, INP_PCS AS INPCS, INT_TON AS INTON \tFROM DEV_IDN.IDN_DWH.R_BTZ_OTH_UOM) TC1  ON T1.SKUCD = TC1.SKUCD  WHERE T.AVG_INTON != 0 AND T.AVG_INTON IS NOT NULL     QUALIFY ROW_NUMBER() OVER (PARTITION BY   PER_KEY, PRO_KEY, CUS_DIS_KEY, ARE_KEY, TYP_KEY, DIS_KEY   ORDER BY PRO_DAT DESC) = 1     ) SOURCE ON dest.PER_KEY = source.PER_KEY AND dest.PRO_KEY = source.PRO_KEY AND dest.CUS_DIS_KEY = source.CUS_DIS_KEY AND dest.ARE_KEY = source.ARE_KEY AND dest.TYP_KEY = source.TYP_KEY AND dest.DIS_KEY = source.DIS_KEY WHEN MATCHED THEN UPDATE SET dest.PER_KEY = source.PER_KEY, dest.PRO_KEY = source.PRO_KEY, dest.CUS_DIS_KEY = source.CUS_DIS_KEY, dest.ARE_KEY = source.ARE_KEY, dest.TYP_KEY = source.TYP_KEY, dest.DIS_KEY = source.DIS_KEY, dest.SAL_INP_PCS = source.SAL_INP_PCS, dest.SAL_INC_CAR = source.SAL_INC_CAR, dest.SAL_INK_INK = source.SAL_INK_INK, dest.SAL_INT_TON = source.SAL_INT_TON, dest.SAL_IN4_400 = source.SAL_IN4_400, dest.SAL_INV_VAL = source.SAL_INV_VAL, dest.PRI_RBP = source.PRI_RBP, dest.SOU_SYS_COD = source.SOU_SYS_COD, dest.UPL_DAT = source.UPL_DAT, dest.PRO_DAT = source.PRO_DAT, dest.CRE_TIM = source.CRE_TIM, dest.UPD_TIM = source.UPD_TIM, dest.PRO_ATE = source.PRO_ATE WHEN NOT MATCHED THEN  INSERT( dest.PER_KEY, dest.PRO_KEY, dest.CUS_DIS_KEY, dest.ARE_KEY, dest.TYP_KEY, dest.DIS_KEY, dest.SAL_INP_PCS, dest.SAL_INC_CAR, dest.SAL_INK_INK, dest.SAL_INT_TON, dest.SAL_IN4_400, dest.SAL_INV_VAL, dest.PRI_RBP, dest.SOU_SYS_COD, dest.UPL_DAT, dest.PRO_DAT, dest.CRE_TIM, dest.UPD_TIM, dest.PRO_ATE) VALUES ( source.PER_KEY, source.PRO_KEY, source.CUS_DIS_KEY, source.ARE_KEY, source.TYP_KEY, source.DIS_KEY, source.SAL_INP_PCS, source.SAL_INC_CAR, source.SAL_INK_INK, source.SAL_INT_TON, source.SAL_IN4_400, source.SAL_INV_VAL, source.PRI_RBP, source.SOU_SYS_COD, source.UPL_DAT, source.PRO_DAT, source.CRE_TIM, source.UPD_TIM, source.PRO_ATE);"
+			}
+		},
+		"annotations": [
+			"SFE",
+			"CORE"
+		],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

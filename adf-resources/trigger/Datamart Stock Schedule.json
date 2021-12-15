@@ -1,0 +1,37 @@
+{
+	"name": "Datamart Stock Schedule",
+	"properties": {
+		"description": "This trigger is to set schedule run to load stock data from staging to dev_idn dmt. The data source either from B2B taken by RPA and NKA Extractor loaded to staging or from manual data loaded through sftp. ",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Datamart_Stock",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"schema": "IDN_DMT_SFE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-23T17:33:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						20
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

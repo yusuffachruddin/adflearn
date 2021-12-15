@@ -1,0 +1,45 @@
+{
+	"name": "MTI_Loading Table Helper to Staging Prod",
+	"properties": {
+		"description": "This trigger is set up to schedule data loading for MTI table helper to Staging Prod. There are three tables that are going to be loaded (['MappingArea_MTI.xlsx', 'MappingProduct_MTI.xlsx', 'Master_Customer_MTI.xlsx']). The data was taken from raw container /raw/ts-mti/master/ into curation container using ManualsDataCuration pipeline, and then load to stagging through DatalakeToStagingProd pipeline. The job is supposed to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "IDN_STG_TSM",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['MappingArea_MTI.xlsx', 'MappingProduct_MTI.xlsx', 'Master_Customer_MTI.xlsx']",
+					"source_system_trigram": "MTI"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-04T09:26:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						21
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

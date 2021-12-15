@@ -1,0 +1,42 @@
+{
+	"name": "Manual LKA",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"LKA",
+			"PARETO",
+			"Manuals"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCuration_LKA",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"blob_path": "/raw/manual/sfe/LKA/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-21T21:03:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						23
+					]
+				}
+			}
+		}
+	}
+}

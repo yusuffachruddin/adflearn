@@ -1,0 +1,41 @@
+{
+	"name": "LKA_RETAILER_PARETO_TS_STOCK",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"Core",
+			"SingleQuery",
+			"IDN_DMT_SFE"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "LKA_Retailer_Pareto",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"schema": "IDN_DMT_SFE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-01T16:55:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						4
+					],
+					"hours": [
+						2
+					]
+				}
+			}
+		}
+	}
+}

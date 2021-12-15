@@ -1,0 +1,39 @@
+{
+	"name": "MTI_Curation_daily",
+	"properties": {
+		"description": "This trigger is to run job for curation MTI data from 'MTI_Sellout_Stock.xlsx' in /raw/ts-mti/transaction/ to curated folder. The trigger was run daily.\nfrom curated/dss-sfe/data-curation/data/manuals/mti_sellout_stock",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_list": "['MTI_Sellout_Stock.xlsx']",
+					"blob_path": "/raw/ts-mti/transaction/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-09-28T07:24:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						10
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,66 @@
+{
+	"name": "Blitz Load Staging",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"tsmmka",
+			"STAGING",
+			"PRD"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "tsmmka",
+					"sf_schema": "STAGING",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['dboDim_Area_GeoCity.csv', 'dboDim_Area.csv', 'dboDim_Brand.csv', 'dboDim_Customer_Distributor.csv', 'dboDim_Distributor.csv', 'dboDim_Period.csv', 'dboDim_Product.csv', 'dboDim_Type.csv', 'dboFact_Sales_Target_SS.csv', 'dboFact_Stock_Retailer_SellingIn_Return.csv', 'dboFact_Stock_Retailer_ServiceLevel.csv', 'dboFact_Stock_Retailer.csv', 'dboDim_Distributor_Area_Type.csv']"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "tsmmka",
+					"sf_schema": "IDN_STG_TSM",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['dboDim_Area_GeoCity.csv', 'dboDim_Area.csv', 'dboDim_Brand.csv', 'dboDim_Customer_Distributor.csv', 'dboDim_Distributor.csv', 'dboDim_Period.csv', 'dboDim_Product.csv', 'dboDim_Type.csv', 'dboFact_Sales_Target_SS.csv', 'dboFact_Stock_Retailer_SellingIn_Return.csv', 'dboFact_Stock_Retailer_ServiceLevel.csv', 'dboFact_Stock_Retailer.csv', 'dboDim_Distributor_Area_Type.csv']",
+					"source_system_trigram": "BTZ"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-01T03:18:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}

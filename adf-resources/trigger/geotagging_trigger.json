@@ -1,0 +1,24 @@
+{
+	"name": "geotagging_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Geotagging",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-09-02T23:00:00",
+				"timeZone": "SE Asia Standard Time"
+			}
+		}
+	}
+}

@@ -1,0 +1,80 @@
+{
+	"name": "Datamart_Distributor",
+	"properties": {
+		"description": "Run query from Snowflake at once. Job running based on query to load data distributor to its destination in DMT. The data was loaded through sftp.",
+		"activities": [
+			{
+				"name": "APL_F_BTZ_SND_DSS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('APL_F_BTZ_SND_DSS')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksIDNSpoke",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "IDN_DMT_SFE"
+			}
+		},
+		"variables": {
+			"rsa_private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"db_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			},
+			"APL_F_BTZ_SND_DSS": {
+				"type": "String",
+				"defaultValue": "MERGE INTO DEV_IDN.IDN_DMT_SFE.F_BTZ_SND_DSS as dest  USING  (   with   ref_variable as   (     select to_char(dateadd(day, -1, current_date()),'YYYYMMDD') as selected_date       ),    parsed_data as   (     select     get_ignore_case(to_object(value),'customercode')::integer as customercode,     get_ignore_case(to_object(value), 'branchcode')::integer as branchcode,     get_ignore_case(to_object(value), 'productcode')::string as productcode,     get_ignore_case(to_object(value), 'potype')::string as potype,     to_date((get_ignore_case(to_object(value), 'transactiondate')::string),'yyyymmdd') as transactiondate,     to_date((get_ignore_case(to_object(value), 'process_date')::string), 'yyyymmdd') as process_date,     to_timestamp_ntz((get_ignore_case(to_object(value), 'process_datetime'))) as UPL_DAT,     to_char(to_date((get_ignore_case(to_object(value),'process_date')))) as PRO_DAT,     to_timestamp_ntz((get_ignore_case(to_object(value),'process_datetime'))) as CRE_TIM,     to_timestamp_ntz((get_ignore_case(to_object(value),'process_datetime'))) as UPD_TIM,     to_timestamp_ntz((get_ignore_case(to_object(value), 'process_datetime'))) as PRO_ATE,     sum(get_ignore_case(to_object(value), 'netsales')::numeric) as netsales,     sum(get_ignore_case(to_object(value), 'salesunit')::integer) as salesunit      from dev_idn.idn_stg_apl.s_apl_ss_apl_sales     where partition_date =(select selected_date from ref_variable)     group by 1,2,3,4,5,6,7,8,9,10,11   ),    dim_customer_distributor as   (      select     dis_dis as distributor_id,     try_cast(cus_dis_cod as int) as customer_distributor_code,     cus_dis_key customer_distributor_key      from dev_idn.idn_dmt_sfe.r_btz_snd_cdh     where sou_sys_cod =6     qualify row_number() over(partition by cus_dis_key order by upd_tim desc) =1   ),    dim_distributor as   (     select     dis_dis as distributor_id,     dis_key as distributor_key,     dis_nam as distributor_name     from DEV_IDN.IDN_DMT_SFE.R_BTZ_SND_DBH     where dis_dis ='950014967'      and sou_sys_cod = 6     qualify row_number() over(partition by dis_dis order by upd_tim desc) =1   ),    dim_sales_area_hierarchy as   (     select     distarea_key,     area_key,     dist_area     from dev_idn.idn_dsp_sfe.dim_sales_area_hierarchy     group by 1,2,3   ),    dim_area as   (      select     are_key as area_key     from DEV_IDN.IDN_DMT_SFE.R_BTZ_GEO_ARH     where sou_sys_cod =6     qualify row_number() over(partition by are_key order by upd_tim desc) =1   ),    dim_product as   (     select     pro_key as product_key,     pro_cod as product_code     from DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PDH     where sou_sys_cod=6     qualify row_number() over(partition by pro_key, pro_cod order by upd_tim desc)=1   ),    dim_mapping_product as   (     select     dis as distributorcd,     mat as materialcd,     sku as skucd     from DEV_IDN.IDN_DWH.R_BTZ_MLK_MPD     qualify row_number() over(partition by dis, mat, sku order by pro_dat desc)=1   ),    dim_uomconversion as   (     select     sku as skucd,     inc_car as incar,     inp_pcs as inpcs,     ink_ink as inkg,     int_ton as inton,     in4_400 as in400gr,     inc_cbm as incbm     from DEV_IDN.IDN_DWH.R_BTZ_OTH_UOM     qualify row_number() over(partition by sku order by pro_ate desc) =1   ),    reference_conversion as   (     select     dp.product_key,     dp.product_code,     uom.incar,     uom.inpcs,     uom.inkg,     uom.inton,     uom.in400gr,     uom.incbm,     dmp.distributorcd,     dmp.materialcd,     dmp.skucd      from dim_product dp     left join dim_mapping_product dmp         on dp.product_code = dmp.skucd      left join dim_uomconversion uom         on dp.product_code =uom.skucd      group by 1,2,3,4,5,6,7,8,9,10,11   ),    dim_price as   (     select     to_date(to_char((nye*10000)+((nmo+10)*100-1000+1)),'yyyymmdd') as ymd,     sku as skucd,     rbp     from  DEV_IDN.IDN_DMT_SFE.R_BTZ_PUR_PRC   ),    product_sold_date as   (     select     rc.skucd,     pd.transactiondate     from parsed_data pd     left join reference_conversion rc       on pd.productcode = rc.materialcd     group by 1,2   ),    get_latest_rbp_before_trx_date as   (     select     dp.*,     psd.transactiondate,     row_number() over(partition by psd.skucd order by dp.ymd desc) as rnk     from dim_price dp     left join product_sold_date psd       on dp.skucd = psd.skucd       and dp.ymd <= psd.transactiondate   ),    reference_rbp as   (     select      skucd,     rbp,     transactiondate     from get_latest_rbp_before_trx_date where rnk=1     group by 1,2,3   ),    reference_distributor as   (     select     dsah.distarea_key as branchcode,     pd.customercode,     dcd.distributor_id     from dim_sales_area_hierarchy dsah      left join parsed_data pd       on dsah.distarea_key = pd.branchcode      left join dim_customer_distributor dcd       on pd.customercode = dcd.customer_distributor_code      group by 1,2,3   ),      distributor_area_type as   (     select     mda.dis_are_cod as distributorareacd,     tp.dis_are_typ_key as distributorareatypecd     from dev_idn.idn_dwh.r_btz_dis_mda mda     left join dev_idn.idn_dmt_sfe.r_btz_dis_dat tp         on mda.dis_are_typ_cod = tp.dis_are_typ_cod     qualify row_number() over(partition by mda.dis_are_cod, mda.dis_are_typ_cod order by mda.pro_dat desc)=1   ),    mapping_distributor_area_type as   (     select     rd.*,     md.distributorareatypecd     from reference_distributor rd     left join distributor_area_type md       on concat(rd.distributor_id,'-',rd.branchcode) = md.distributorareacd      group by 1,2,3,4   ),      purchase_type as   (     select     PUR_TYP_ORI_CDX as purchase_type_originalcd,     PUR_TYP_KEY as purchase_type_key     from DEV_IDN.IDN_DMT_SFE.R_BTZ_DIS_PUT     qualify row_number() over(partition by pur_typ_ori_cdx order by pro_dat desc)=1   ),    ss_apl_raw as   (     select      pd.branchcode,     pd.transactiondate,     pd.UPL_DAT,     pd.PRO_DAT,     pd.CRE_TIM,     pd.UPD_TIM,     pd.PRO_ATE,     dcd.customer_distributor_key,     dd.distributor_key,     dsah.distarea_key as distributor_area_key,     rc.product_key,     dsah.area_key,     mda.distributorareatypecd as distributor_area_type_code,      pt.purchase_type_key,     pd.netsales as nett_sales,     pd.salesunit as qty_in_pcs,     div0(pd.salesunit,inpcs)*rc.incar as qty_in_car,     div0(pd.salesunit,inpcs)*rc.inkg as qty_in_kg,     div0(pd.salesunit,inpcs)*rc.inton as qty_in_ton,     div0(pd.salesunit,inpcs)*rc.in400gr as qty_in_400gr,     div0(pd.salesunit,inpcs)*rc.incbm as qty_in_cbm,     pd.salesunit*rbp as sales_in_rbp      from parsed_data pd     left join dim_customer_distributor dcd         on pd.customercode = dcd.customer_distributor_code      left join dim_distributor dd         on dcd.distributor_id = dd.distributor_id      left join dim_sales_area_hierarchy dsah         on pd.branchcode = dsah.distarea_key      left join reference_conversion rc         on pd.productcode = rc.materialcd      left join reference_rbp rr         on pd.transactiondate =rr.transactiondate         and rc.skucd = rr.skucd      left join mapping_distributor_area_type mda       on pd.customercode = mda.customercode       and dd.distributor_id = mda.distributor_id          left join purchase_type pt         on pd.potype = pt.purchase_type_originalcd      where mda.distributorareatypecd is not null   ),   insert_source_table as   (     select      replace(to_char(transactiondate),'-')::number as PER_KEY,     customer_distributor_key as CUS_DIS_KEY,     distributor_key as DIS_KEY,     distributor_area_key as DIS_ARE_KEY,     product_key as PRO_KEY,     area_key as ARE_KEY,     distributor_area_type_code as DIS_ARE_TYP_KEY,     purchase_type_key as PUR_TYP_KEY,     6 as SOU_SYS_COD,     nett_sales as NET_SAL,     qty_in_pcs as QTY_INP_PCS,     qty_in_car as QTY_INC_CAR,     qty_in_kg as QTY_INK_INK,     qty_in_ton as QTY_INT_TON,     qty_in_400gr as QTY_IN4_400,     qty_in_cbm as QTY_INC_CBM,     sales_in_rbp as SAL_INR_RBP,     UPL_DAT,     PRO_DAT,     CRE_TIM,     UPD_TIM,     PRO_ATE     from ss_apl_raw   )   select * from insert_source_table   qualify row_number() over   (     partition by per_key, cus_dis_key, dis_key, dis_are_key, pro_key, are_key, dis_are_typ_key, pur_typ_key     order by pro_ate desc   ) =1    ) as source   ON dest.PER_KEY = source.PER_KEY AND dest.CUS_DIS_KEY = source.CUS_DIS_KEY AND dest.DIS_KEY = source.DIS_KEY AND dest.DIS_ARE_KEY = source.DIS_ARE_KEY AND dest.PRO_KEY = source.PRO_KEY AND dest.ARE_KEY = source.ARE_KEY AND dest.DIS_ARE_TYP_KEY = source.DIS_ARE_TYP_KEY AND dest.PUR_TYP_KEY = source.PUR_TYP_KEY AND dest.SOU_SYS_COD = source.SOU_SYS_COD  WHEN MATCHED THEN UPDATE SET dest.PER_KEY = source.PER_KEY, dest.CUS_DIS_KEY = source.CUS_DIS_KEY, dest.DIS_KEY = source.DIS_KEY, dest.DIS_ARE_KEY = source.DIS_ARE_KEY, dest.PRO_KEY = source.PRO_KEY, dest.ARE_KEY = source.ARE_KEY, dest.DIS_ARE_TYP_KEY = source.DIS_ARE_TYP_KEY, dest.PUR_TYP_KEY = source.PUR_TYP_KEY, dest.SOU_SYS_COD = source.SOU_SYS_COD, dest.NET_SAL = source.NET_SAL, dest.QTY_INP_PCS = source.QTY_INP_PCS, dest.QTY_INC_CAR = source.QTY_INC_CAR, dest.QTY_INK_INK = source.QTY_INK_INK, dest.QTY_INT_TON = source.QTY_INT_TON, dest.QTY_IN4_400 = source.QTY_IN4_400, dest.QTY_INC_CBM = source.QTY_INC_CBM, dest.SAL_INR_RBP = source.SAL_INR_RBP, dest.UPL_DAT = source.UPL_DAT, dest.PRO_DAT = source.PRO_DAT, dest.CRE_TIM = source.CRE_TIM, dest.UPD_TIM = source.UPD_TIM, dest.PRO_ATE = source.PRO_ATE  WHEN NOT MATCHED THEN INSERT (   dest.PER_KEY,   dest.CUS_DIS_KEY,   dest.DIS_KEY,   dest.DIS_ARE_KEY,   dest.PRO_KEY,   dest.ARE_KEY,   dest.DIS_ARE_TYP_KEY,   dest.PUR_TYP_KEY,   dest.SOU_SYS_COD,   dest.NET_SAL,   dest.QTY_INP_PCS,   dest.QTY_INC_CAR,   dest.QTY_INK_INK,   dest.QTY_INT_TON,   dest.QTY_IN4_400,   dest.QTY_INC_CBM,   dest.SAL_INR_RBP,   dest.UPL_DAT,   dest.PRO_DAT,   dest.CRE_TIM,   dest.UPD_TIM,   dest.PRO_ATE ) VALUES  (   source.PER_KEY,   source.CUS_DIS_KEY,   source.DIS_KEY,   source.DIS_ARE_KEY,   source.PRO_KEY,   source.ARE_KEY,   source.DIS_ARE_TYP_KEY,   source.PUR_TYP_KEY,   source.SOU_SYS_COD,   source.NET_SAL,   source.QTY_INP_PCS,   source.QTY_INC_CAR,   source.QTY_INK_INK,   source.QTY_INT_TON,   source.QTY_IN4_400,   source.QTY_INC_CBM,   source.SAL_INR_RBP,   source.UPL_DAT,   source.PRO_DAT,   source.CRE_TIM,   source.UPD_TIM,   source.PRO_ATE );"
+			}
+		},
+		"annotations": [
+			"SFE",
+			"CORE"
+		],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

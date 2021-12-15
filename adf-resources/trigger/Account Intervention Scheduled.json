@@ -1,0 +1,38 @@
+{
+	"name": "Account Intervention Scheduled",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCurationStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_list": "['account_intervention.xlsx']",
+					"blob_path": "/raw/manual/sfe/ACCOUNT_INTERVENTION/",
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema_old": "STAGING",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"source_system_trigram": "MKA",
+					"sf_schema_dev": "IDN_STG_TSM"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 4,
+				"startTime": "2021-09-03T20:46:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

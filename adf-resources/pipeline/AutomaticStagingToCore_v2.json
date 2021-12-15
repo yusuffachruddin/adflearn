@@ -1,0 +1,76 @@
+{
+	"name": "AutomaticStagingToCore_v2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Automatic Staging to Core v2",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Automatic Staging to Core with Table Trigrams",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"load_mode": {
+							"value": "@pipeline().parameters.load_mode",
+							"type": "Expression"
+						},
+						"payload": {
+							"value": "@pipeline().parameters.payload",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"reserved_words": {
+							"value": "@variables('reserved_words')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"load_mode": {
+				"type": "string",
+				"defaultValue": "latest"
+			},
+			"payload": {
+				"type": "string",
+				"defaultValue": "[{'environment': 'DEV', 'source_database': 'DEV_IDN', 'source_schema': 'IDN_STG_TSM', 'source_table': 'S_MNL_IDM_PREMIUM_MARKET_SHARE', 'table_type': 'F', 'source_system_trigrams': 'MNL', 'domain_name': 'SND', 'target_database': 'DEV_IDN', 'target_schema': 'IDN_DWH', 'primary_keys': ['branch_name', 'principal_name', 'brand', 'product_name', 'period_date']}]"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"reserved_words": {
+				"type": "String",
+				"defaultValue": "['ACCOUNT', 'ALL', 'ALTER', 'AND', 'ANY', 'AS', 'BETWEEN', 'BY', 'CASE', 'CAST', 'CHECK', 'COLUMN', 'CONNECT', 'CONNECTION', 'CONSTRAINT', 'CREATE', 'CROSS', 'CURRENT', 'CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP', 'CURRENT_USER', 'DATABASE', 'DELETE', 'DISTINCT', 'DROP', 'ELSE', 'EXISTS', 'FALSE', 'FOLLOWING', 'FOR', 'FROM', 'FULL', 'GRANT', 'GROUP', 'GSCLUSTER', 'HAVING', 'ILIKE', 'IN', 'INCREMENT', 'INNER', 'INSERT', 'INTERSECT', 'INTO', 'IS', 'ISSUE', 'JOIN', 'LATERAL', 'LEFT', 'LIKE', 'LOCALTIME', 'LOCALTIMESTAMP', 'MINUS', 'NATURAL', 'NOT', 'NULL', 'OF', 'ON', 'OR', 'ORDER', 'ORGANIZATION', 'QUALIFY', 'REGEXP', 'REVOKE', 'RIGHT', 'RLIKE', 'ROW', 'ROWS', 'SAMPLE', 'SCHEMA', 'SELECT', 'SET', 'SOME', 'START', 'TABLE', 'TABLESAMPLE', 'THEN', 'TO', 'TRIGGER', 'TRUE', 'TRY_CAST', 'UNION', 'UNIQUE', 'UPDATE', 'USING', 'VALUES', 'VIEW', 'WHEN', 'WHENEVER', 'WHERE', 'WITH']"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-08T00:49:21Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

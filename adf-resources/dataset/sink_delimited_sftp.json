@@ -1,0 +1,39 @@
+{
+	"name": "sink_delimited_sftp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sftp_alan_146",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"fileName": "store-list_v3.csv",
+				"folderPath": "/production"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

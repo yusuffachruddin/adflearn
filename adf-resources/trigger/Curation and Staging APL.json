@@ -1,0 +1,43 @@
+{
+	"name": "Curation and Staging APL",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Curation_APL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"container": "raw",
+					"use_case": "dss-sfe",
+					"raw_dir": "/ss-apl/",
+					"report": "SALES",
+					"target_container": "curated",
+					"blob": "ss_apl",
+					"table": "ss_apl_sales",
+					"source_system": "APL",
+					"staging_schema": "IDN_STG_APL"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-07-30T01:31:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						23
+					]
+				}
+			}
+		}
+	}
+}

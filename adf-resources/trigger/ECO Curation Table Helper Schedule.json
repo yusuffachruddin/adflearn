@@ -1,0 +1,39 @@
+{
+	"name": "ECO Curation Table Helper Schedule",
+	"properties": {
+		"description": "This trigger is set up to schedule data loading for ecommerce table helper. There are three tables that are going to be loaded (['MAPPING_AREA_ALFACART.xlsx', 'MAPPING_CUSTOMER_ALFACART.xlsx', 'MAPPING_CUSTOMER_ECOMMERCE.xlsx']). The data was taken from raw container /raw/ts-ecommerce/MAPPING/ into curation container. The job was supposed to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_list": "['MAPPING_AREA_ALFACART.xlsx', 'MAPPING_CUSTOMER_ALFACART.xlsx', 'MAPPING_CUSTOMER_ECOMMERCE.xlsx']",
+					"blob_path": "/raw/ts-ecommerce/MAPPING/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-11-01T10:19:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						20
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

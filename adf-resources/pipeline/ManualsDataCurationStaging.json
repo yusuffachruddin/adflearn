@@ -1,0 +1,236 @@
+{
+	"name": "ManualsDataCurationStaging",
+	"properties": {
+		"activities": [
+			{
+				"name": "Manuals Data Curation",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Curation Manuals",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@pipeline().parameters.table_list",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"sf_credential": {
+							"value": "@variables('sf_credential')",
+							"type": "Expression"
+						},
+						"blob_path": {
+							"value": "@pipeline().parameters.blob_path",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksIDNSpoke",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Execute DatalakeToStaging",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Manuals Data Curation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DatalakeToStaging",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"mode": {
+							"value": "@pipeline().parameters.mode",
+							"type": "Expression"
+						},
+						"blob": {
+							"value": "@pipeline().parameters.blob",
+							"type": "Expression"
+						},
+						"sf_schema": {
+							"value": "@pipeline().parameters.sf_schema_old",
+							"type": "Expression"
+						},
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"file_format": {
+							"value": "@pipeline().parameters.file_format",
+							"type": "Expression"
+						},
+						"storage_integration": {
+							"value": "@pipeline().parameters.storage_integration",
+							"type": "Expression"
+						},
+						"stage_name": {
+							"value": "@pipeline().parameters.stage_name",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@pipeline().parameters.table_list",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Execute DatalakeToStagingProd",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute DatalakeToStaging",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DatalakeToStagingProd",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"mode": {
+							"value": "@pipeline().parameters.mode",
+							"type": "Expression"
+						},
+						"blob": {
+							"value": "@pipeline().parameters.blob",
+							"type": "Expression"
+						},
+						"sf_schema": {
+							"value": "@pipeline().parameters.sf_schema_dev",
+							"type": "Expression"
+						},
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"file_format": {
+							"value": "@pipeline().parameters.file_format",
+							"type": "Expression"
+						},
+						"storage_integration": {
+							"value": "@pipeline().parameters.storage_integration",
+							"type": "Expression"
+						},
+						"stage_name": {
+							"value": "@pipeline().parameters.stage_name",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@pipeline().parameters.table_list",
+							"type": "Expression"
+						},
+						"source_system_trigram": {
+							"value": "@pipeline().parameters.source_system_trigram",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "curated"
+			},
+			"table_list": {
+				"type": "string",
+				"defaultValue": "['Mapping_Brand_To_MS.xls', 'Mapping_SKU_Core.xlsx', 'Mapping_SellPo_To_DC.xls']"
+			},
+			"blob_path": {
+				"type": "string",
+				"defaultValue": "/raw/manual/sfe/MMKA/"
+			},
+			"mode": {
+				"type": "string",
+				"defaultValue": "external"
+			},
+			"blob": {
+				"type": "string",
+				"defaultValue": "manuals"
+			},
+			"sf_schema_old": {
+				"type": "string",
+				"defaultValue": "STAGING"
+			},
+			"file_format": {
+				"type": "string",
+				"defaultValue": "sfe_parquet"
+			},
+			"storage_integration": {
+				"type": "string",
+				"defaultValue": "dev_spoke_apac_uc_sfe"
+			},
+			"stage_name": {
+				"type": "string",
+				"defaultValue": "sfe_stage"
+			},
+			"source_system_trigram": {
+				"type": "string",
+				"defaultValue": "MKA"
+			},
+			"sf_schema_dev": {
+				"type": "string",
+				"defaultValue": "IDN_STG_TSM"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"sf_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-04T22:31:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

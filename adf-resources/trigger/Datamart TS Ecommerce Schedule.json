@@ -1,0 +1,37 @@
+{
+	"name": "Datamart TS Ecommerce Schedule",
+	"properties": {
+		"description": "This trigger is to set schedule run to load TS E-Commerce data from staging to dev_idn dmt. The data source is from manual data load through sftp and processed to staging.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Datamart_TS_ECO",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dev-sfe",
+					"schema": "IDN_DMT_SFE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-12-01T06:00:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						7
+					]
+				}
+			}
+		}
+	}
+}

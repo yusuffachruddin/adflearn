@@ -1,0 +1,1165 @@
+{
+	"name": "SFE_SingleQueryCoreLoading",
+	"properties": {
+		"description": "Run query at Snowflake at once",
+		"activities": [
+			{
+				"name": "DIM_BRAND_MARKET_SHARE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_BRAND_MARKET_SHARE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_RETAILER_DC_SELLPO",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_PRODUCT_CHANNEL_TARGET",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_RETAILER_DC_SELLPO')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_PRODUCT_CHANNEL_CORE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_BRAND_MARKET_SHARE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_PRODUCT_CHANNEL_CORE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_PRODUCT_CHANNEL_TARGET",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_PRODUCT_CHANNEL_CORE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_PRODUCT_CHANNEL_TARGET')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_MARKET_SHARE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_RETAILER_DC_SELLPO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_MARKET_SHARE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_STORE_COUNT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_MARKET_SHARE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_STORE_COUNT')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_MARKET_SHARE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_STORE_COUNT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_MARKET_SHARE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_RETURN",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_RETURN",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_RETURN')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_SECONDARY_SALES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_SECONDARY_SALES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_SECONDARY_SALES')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_SERVICE_LEVEL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_DISTRIBUTOR_HIST",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_SERVICE_LEVEL')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_STOCK",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_STOCK",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_STOCK')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_STORE_COUNT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "UPDATE_SERVICE_LEVEL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_STORE_COUNT')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "UPDATE_TERTIARY_SALES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_TERTIARY_SALES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('UPDATE_TERTIARY_SALES')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_DISTRIBUTOR_HIST",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "UPDATE_MARKET_SHARE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_DISTRIBUTOR_HIST')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DELETE_EXISTING_FACT_RETAILER_STOCK",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DELETE_EXISTING_FACT_RETAILER_STOCK')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_STOCK",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DELETE_EXISTING_FACT_RETAILER_STOCK",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_STOCK')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DELETE_EXISTING_RETAILER_TERTIARY_SALES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DELETE_EXISTING_FACT_RETAILER_TERTIARY_SALES')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_TERTIARY_SALES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DELETE_EXISTING_RETAILER_TERTIARY_SALES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_TERTIARY_SALES')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DELETE_EXISTING_RETAILER_RETURN",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DELETE_EXISTING_RETAILER_RETURN')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_RETURN",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DELETE_EXISTING_RETAILER_RETURN",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_RETURN')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DELETE_EXISTING_RETAILER_SECONDARY_SALES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DELETE_EXISTING_RETAILER_SECONDARY_SALES')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_SECONDARY_SALES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DELETE_EXISTING_RETAILER_SECONDARY_SALES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_SECONDARY_SALES')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "CORE"
+			}
+		},
+		"variables": {
+			"rsa_private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"db_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			},
+			"DIM_BRAND_MARKET_SHARE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.DIM_BRAND_MARKET_SHARE dest USING ( SELECT \tCAST(VALUE:category AS VARCHAR) CATEGORY, \tCAST(VALUE:brand AS VARCHAR) BRAND, \tCAST(VALUE:segment AS VARCHAR) SEGMENT, \tCAST(VALUE:stage AS VARCHAR) STAGE, \tCAST(VALUE:manufacturer AS VARCHAR) MANUFACTURER, \tCAST(VALUE:group_brand AS VARCHAR) GROUP_BRAND, \tCAST(VALUE:account AS VARCHAR) ACCOUNT, \tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) CREATE_TIMESTAMP, \tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) UPDATE_TIMESTAMP, \tCAST(VALUE:process_date AS VARCHAR) PROCESS_DATE, \tCAST(VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME FROM STAGING.RAW_MAPPING_BRAND_TO_MS WHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_MAPPING_BRAND_TO_MS) QUALIFY ROW_NUMBER() OVER (PARTITION BY CATEGORY, BRAND, SEGMENT, ACCOUNT ORDER BY PROCESS_DATETIME DESC) = 1 ) source ON dest.CATEGORY = source.CATEGORY AND dest.BRAND = source.BRAND AND dest.SEGMENT = source.SEGMENT AND dest.ACCOUNT = source.ACCOUNT WHEN MATCHED THEN UPDATE SET dest.CATEGORY = source.CATEGORY, dest.BRAND = source.BRAND, dest.SEGMENT = source.SEGMENT, dest.STAGE = source.STAGE, dest.MANUFACTURER = source.MANUFACTURER, dest.GROUP_BRAND = source.GROUP_BRAND, dest.ACCOUNT = source.ACCOUNT, dest.CREATE_TIMESTAMP = source.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP = source.UPDATE_TIMESTAMP, dest.PROCESS_DATE = source.PROCESS_DATE, dest.PROCESS_DATETIME = source.PROCESS_DATETIME WHEN NOT MATCHED THEN INSERT( dest.CATEGORY,  dest.BRAND,  dest.SEGMENT,  dest.STAGE,  dest.MANUFACTURER,  dest.GROUP_BRAND,  dest.ACCOUNT,  dest.CREATE_TIMESTAMP,  dest.UPDATE_TIMESTAMP,  dest.PROCESS_DATE,  dest.PROCESS_DATETIME) VALUES( source.CATEGORY,  source.BRAND,  source.SEGMENT,  source.STAGE,  source.MANUFACTURER,  source.GROUP_BRAND,  source.ACCOUNT,  source.CREATE_TIMESTAMP,  source.UPDATE_TIMESTAMP,  source.PROCESS_DATE,  source.PROCESS_DATE )"
+			},
+			"DIM_PRODUCT_CHANNEL_CORE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.DIM_PRODUCT_CHANNEL_CORE dest USING ( \tSELECT \t   tb.PRODUCT_KEY, \t   CAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t   CASE WHEN CAST(ta.VALUE:sku_core AS VARCHAR) = 'CORE' THEN TRUE ELSE FALSE END CORE_FLAG, \t   CAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) CREATE_TIMESTAMP, \t   CAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) UPDATE_TIMESTAMP, \t   CAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t   CAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t   ta.PARTITION_DATE PARTITION_DATE \tFROM STAGING.RAW_MAPPING_SKU_CORE ta \tJOIN CORE.DIM_PRODUCT tb \tON CAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR)     WHERE tb.SOURCE_SYSTEM_CODE IN ('0','6') AND tb.PRODUCT_TYPE != 'COMPETITOR' AND tb.SKU_ORI_DESC != 'OLD PRODUCT'     AND ta.PARTITION_DATE = (SELECT CAST(MAX(PARTITION_DATE) AS VARCHAR) FROM STAGING.RAW_MAPPING_SKU_CORE) \tQUALIFY ROW_NUMBER() OVER (PARTITION BY \tPRODUCT_KEY, CHANNEL \tORDER BY PROCESS_DATETIME DESC) = 1 ) source ON dest.PRODUCT_KEY = source.PRODUCT_KEY AND dest.CHANNEL = source.CHANNEL WHEN MATCHED THEN UPDATE SET dest.PRODUCT_KEY = source.PRODUCT_KEY, dest.CHANNEL = source.CHANNEL, dest.CORE_FLAG = source.CORE_FLAG, dest.CREATE_TIMESTAMP = source.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP = source.UPDATE_TIMESTAMP, dest.PROCESS_DATE = source.PROCESS_DATE, dest.PROCESS_DATETIME = source.PROCESS_DATETIME, dest.PARTITION_DATE = source.PARTITION_DATE WHEN NOT MATCHED THEN INSERT( dest.PRODUCT_KEY,  dest.CHANNEL,  dest.CORE_FLAG,  dest.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP, dest.PROCESS_DATE, dest.PROCESS_DATETIME, dest.PARTITION_DATE) VALUES( source.PRODUCT_KEY,  source.CHANNEL,  source.CORE_FLAG,  source.CREATE_TIMESTAMP, source.UPDATE_TIMESTAMP, source.PROCESS_DATE, source.PROCESS_DATETIME, source.PARTITION_DATE )"
+			},
+			"DIM_PRODUCT_CHANNEL_TARGET": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.DIM_PRODUCT_CHANNEL_TARGET dest USING ( \tSELECT \t  SUB_A.PRODUCT_KEY, \t  SUB_A.CHANNEL, \t  SUB_A.TARGET_TYPE, \t  SUB_A.TARGET, \t  CAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) CREATE_TIMESTAMP, \t  CAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) UPDATE_TIMESTAMP, \t  SUB_A.PROCESS_DATE, \t  SUB_A.PROCESS_DATETIME, \t  SUB_A.PARTITION_DATE \tFROM ( \t\tSELECT \t\t\ttb.PRODUCT_KEY, \t\t\tCAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t\t\t'DSI' TARGET_TYPE, \t\t\tCAST(ta.VALUE:target_dsi AS NUMBER(38,8)) TARGET, \t\t\tCAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t\t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t\t\tta.PARTITION_DATE PARTITION_DATE \t\tFROM STAGING.RAW_MAPPING_SKU_CORE ta \t\tJOIN CORE.DIM_PRODUCT tb \t\tON CAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR)         WHERE tb.SOURCE_SYSTEM_CODE IN ('0','6') AND tb.PRODUCT_TYPE != 'COMPETITOR' AND tb.SKU_ORI_DESC != 'OLD PRODUCT'         AND ta.PARTITION_DATE = (SELECT CAST(MAX(PARTITION_DATE) AS VARCHAR) FROM STAGING.RAW_MAPPING_SKU_CORE) \t\tUNION ALL \t\tSELECT \t\t\ttb.PRODUCT_KEY, \t\t\tCAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t\t\t'RETURN' TARGET_TYPE, \t\t\tCAST(ta.VALUE:target_return AS NUMBER(38,8)) TARGET, \t\t\tCAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t\t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t\t\tta.PARTITION_DATE PARTITION_DATE \t\tFROM STAGING.RAW_MAPPING_SKU_CORE ta \t\tJOIN CORE.DIM_PRODUCT tb \t\tON CAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR)         WHERE tb.SOURCE_SYSTEM_CODE IN ('0','6') AND tb.PRODUCT_TYPE != 'COMPETITOR' AND tb.SKU_ORI_DESC != 'OLD PRODUCT'         AND ta.PARTITION_DATE = (SELECT CAST(MAX(PARTITION_DATE) AS VARCHAR) FROM STAGING.RAW_MAPPING_SKU_CORE) \t\tUNION ALL \t\tSELECT \t\t\ttb.PRODUCT_KEY, \t\t\tCAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t\t\t'SERVICE LEVEL' TARGET_TYPE, \t\t\tCAST(ta.VALUE:target_service_level AS NUMBER(38,8)) TARGET, \t\t\tCAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t\t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t\t\tta.PARTITION_DATE PARTITION_DATE \t\tFROM STAGING.RAW_MAPPING_SKU_CORE ta \t\tJOIN CORE.DIM_PRODUCT tb \t\tON CAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR)         WHERE tb.SOURCE_SYSTEM_CODE IN ('0','6') AND tb.PRODUCT_TYPE != 'COMPETITOR' AND tb.SKU_ORI_DESC != 'OLD PRODUCT'         AND ta.PARTITION_DATE = (SELECT CAST(MAX(PARTITION_DATE) AS VARCHAR) FROM STAGING.RAW_MAPPING_SKU_CORE) \t) SUB_A ) source ON dest.PRODUCT_KEY = source.PRODUCT_KEY AND dest.CHANNEL = source.CHANNEL AND dest.TARGET_TYPE = source.TARGET_TYPE WHEN MATCHED THEN UPDATE SET dest.PRODUCT_KEY = source.PRODUCT_KEY, dest.CHANNEL = source.CHANNEL, dest.TARGET_TYPE = source.TARGET_TYPE, dest.TARGET = source.TARGET, dest.CREATE_TIMESTAMP = source.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP = source.UPDATE_TIMESTAMP, dest.PROCESS_DATE = source.PROCESS_DATE, dest.PROCESS_DATETIME = source.PROCESS_DATETIME, dest.PARTITION_DATE = source.PARTITION_DATE WHEN NOT MATCHED THEN INSERT( dest.PRODUCT_KEY,  dest.CHANNEL,  dest.TARGET_TYPE,  dest.TARGET,  dest.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP, dest.PROCESS_DATE, dest.PROCESS_DATETIME, dest.PARTITION_DATE) VALUES( source.PRODUCT_KEY,  source.CHANNEL,  source.TARGET_TYPE,  source.TARGET,  source.CREATE_TIMESTAMP, source.UPDATE_TIMESTAMP, source.PROCESS_DATE, source.PROCESS_DATETIME, source.PARTITION_DATE )"
+			},
+			"DIM_RETAILER_DC_SELLPO": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.DIM_RETAILER_DC_SELLPO dest USING ( SELECT \tb.CUSTOMER_DISTRIBUTOR_KEY ,  \ta.value:dc_b2b_code::VARCHAR DISTRIBUTOR_RETAILER_DC_CODE,     \ta.value:dc_b2b::VARCHAR DISTRIBUTOR_RETAILER_DC_NAME,        \ta.value:distributor_id::VARCHAR DISTRIBUTOR_ID,        \ta.value:distributor_name::VARCHAR DISTRIBUTOR_NAME,        \tc.AREA_KEY AREA_KEY,        \ta.value:sellpo_code::VARCHAR DISTRIBUTOR_SELLPO_ORIGINAL_CODE,        \ta.value:selling_point::VARCHAR DISTRIBUTOR_SELLPO,        \ta.value:dc_code::VARCHAR DISTRIBUTOR_DC_CODE,        \ta.value:dc_name::VARCHAR DISTRIBUTOR_DC_NAME,        \tb.SOURCE_SYSTEM_CODE SOURCE_SYSTEM_CODE, \tNULL UPLOAD_DATE, \tNULL UPDATE_TIMESTAMP, \tNULL CREATE_TIMESTAMP, \tCAST(a.VALUE:process_date AS VARCHAR) PROCESS_DATE, \tCAST(a.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \ta.PARTITION_DATE PARTITION_DATE FROM STAGING.RAW_MAPPING_SELLPO_TO_DC a JOIN CORE.DIM_CUSTOMER_DISTRIBUTOR_HIST b  \tON b.CUSTOMER_DISTRIBUTOR_CODE  = a.value:dc_b2b_code::VARCHAR  \tAND b.PROCESS_DATE = (SELECT MAX (PROCESS_DATE) FROM CORE.DIM_CUSTOMER_DISTRIBUTOR_HIST) \tAND b.SOURCE_SYSTEM_CODE IN ('0','6') JOIN CORE.DIM_AREA_HIST c \tON c.ORIGINAL_CODE  = a.value:sellpo_code::VARCHAR  \tAND c.PROCESS_DATE = (SELECT MAX (PROCESS_DATE) FROM CORE.DIM_AREA_HIST) \tAND c.SOURCE_SYSTEM_CODE IN ('0','6') WHERE a.value:validation::VARCHAR = 'ACTIVE' AND a.PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_MAPPING_SELLPO_TO_DC) QUALIFY ROW_NUMBER() OVER (PARTITION BY CUSTOMER_DISTRIBUTOR_KEY, DISTRIBUTOR_RETAILER_DC_CODE, DISTRIBUTOR_SELLPO_ORIGINAL_CODE, DISTRIBUTOR_DC_CODE ORDER BY a.PARTITION_DATE DESC) = 1 ) source ON dest.CUSTOMER_DISTRIBUTOR_KEY = source.CUSTOMER_DISTRIBUTOR_KEY AND dest.DISTRIBUTOR_RETAILER_DC_CODE = source.DISTRIBUTOR_RETAILER_DC_CODE AND dest.DISTRIBUTOR_SELLPO_ORIGINAL_CODE = source.DISTRIBUTOR_SELLPO_ORIGINAL_CODE AND dest.DISTRIBUTOR_DC_CODE = source.DISTRIBUTOR_DC_CODE WHEN MATCHED THEN UPDATE SET dest.CUSTOMER_DISTRIBUTOR_KEY = source.CUSTOMER_DISTRIBUTOR_KEY, dest.DISTRIBUTOR_ID = source.DISTRIBUTOR_ID, dest.DISTRIBUTOR_NAME = source.DISTRIBUTOR_NAME, dest.AREA_KEY = source.AREA_KEY, dest.DISTRIBUTOR_RETAILER_DC_NAME = source.DISTRIBUTOR_RETAILER_DC_NAME, dest.DISTRIBUTOR_RETAILER_DC_CODE = source.DISTRIBUTOR_RETAILER_DC_CODE, dest.DISTRIBUTOR_SELLPO_ORIGINAL_CODE = source.DISTRIBUTOR_SELLPO_ORIGINAL_CODE, dest.DISTRIBUTOR_SELLPO = source.DISTRIBUTOR_SELLPO, dest.DISTRIBUTOR_DC_CODE = source.DISTRIBUTOR_DC_CODE, dest.DISTRIBUTOR_DC_NAME = source.DISTRIBUTOR_DC_NAME, dest.SOURCE_SYSTEM_CODE = source.SOURCE_SYSTEM_CODE, dest.UPLOAD_DATE = source.UPLOAD_DATE, dest.UPDATE_TIMESTAMP = source.UPDATE_TIMESTAMP, dest.CREATE_TIMESTAMP = source.CREATE_TIMESTAMP, dest.PROCESS_DATE = source.PROCESS_DATE, dest.PROCESS_DATETIME = source.PROCESS_DATETIME, dest.PARTITION_DATE = source.PARTITION_DATE  WHEN NOT MATCHED THEN INSERT( dest.CUSTOMER_DISTRIBUTOR_KEY,  dest.DISTRIBUTOR_ID,  dest.DISTRIBUTOR_NAME,  dest.AREA_KEY, dest.DISTRIBUTOR_RETAILER_DC_NAME,  dest.DISTRIBUTOR_RETAILER_DC_CODE,  dest.DISTRIBUTOR_SELLPO_ORIGINAL_CODE,  dest.DISTRIBUTOR_SELLPO,  dest.DISTRIBUTOR_DC_CODE,  dest.DISTRIBUTOR_DC_NAME,  dest.SOURCE_SYSTEM_CODE,  dest.UPLOAD_DATE,  dest.UPDATE_TIMESTAMP,  dest.CREATE_TIMESTAMP,  dest.PROCESS_DATE,  dest.PROCESS_DATETIME, dest.PARTITION_DATE )  VALUES( source.CUSTOMER_DISTRIBUTOR_KEY,  source.DISTRIBUTOR_ID,  source.DISTRIBUTOR_NAME,  source.AREA_KEY, source.DISTRIBUTOR_RETAILER_DC_NAME,  source.DISTRIBUTOR_RETAILER_DC_CODE,  source.DISTRIBUTOR_SELLPO_ORIGINAL_CODE,  source.DISTRIBUTOR_SELLPO,  source.DISTRIBUTOR_DC_CODE,  source.DISTRIBUTOR_DC_NAME,  source.SOURCE_SYSTEM_CODE,  source.UPLOAD_DATE,  source.UPDATE_TIMESTAMP,  source.CREATE_TIMESTAMP,  source.PROCESS_DATE,  source.PROCESS_DATETIME, source.PARTITION_DATE )"
+			},
+			"FACT_RETAILER_MARKET_SHARE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.FACT_RETAILER_MARKET_SHARE dest USING ( SELECT DISTINCT \tCONCAT(REPLACE(GET(SPLIT(GET(SPLIT(REPLACE(VALUE:filename::VARCHAR, ' - ', '|'), '|'), 1)::VARCHAR, '.'), 0)::VARCHAR, '-', ''), '01') PERIOD_KEY, \tVALUE:brand::VARCHAR brand, \tVALUE:category::VARCHAR category, \tVALUE:store::VARCHAR ACCOUNT, \t(VALUE:share_this_year::NUMBER(38,20)/100)::NUMBER(38,20) MARKET_SHARE_PERCENTAGE, \t0 IS_MONTHLY, \tVALUE:process_date::VARCHAR PROCESS_DATE, \tMAX(VALUE:process_datetime::TIMESTAMP_TZ) PROCESS_DATETIME FROM STAGING.RAW_ALFAMART WHERE PARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38,0)) FROM STAGING.RAW_ALFAMART) AND LOWER(VALUE:share_this_year::VARCHAR) != 'nan' GROUP BY 1, 2, 3, 4, 5, 6, 7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERIOD_KEY, BRAND, CATEGORY, ACCOUNT, IS_MONTHLY ORDER BY PROCESS_DATETIME DESC) = 1 UNION SELECT DISTINCT \tCONCAT(REPLACE(GET(SPLIT(GET(SPLIT(REPLACE(VALUE:filename::VARCHAR, ' - ', '|'), '|'), 1)::VARCHAR, '.'), 0)::VARCHAR, '-', ''), '01') PERIOD_KEY, \tVALUE:brand::VARCHAR brand, \tVALUE:category::VARCHAR category, \tVALUE:store::VARCHAR ACCOUNT, \t(VALUE:share_this_year::NUMBER(38,20)/100)::NUMBER(38,20) MARKET_SHARE_PERCENTAGE, \t0 IS_MONTHLY, \tVALUE:process_date::VARCHAR PROCESS_DATE, \tMAX(VALUE:process_datetime::TIMESTAMP_TZ) PROCESS_DATETIME FROM STAGING.RAW_ALFAMIDI WHERE PARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38,0)) FROM STAGING.RAW_ALFAMIDI) AND LOWER(VALUE:share_this_year::VARCHAR) != 'nan' GROUP BY 1, 2, 3, 4, 5, 6, 7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERIOD_KEY, BRAND, CATEGORY, ACCOUNT, IS_MONTHLY ORDER BY PROCESS_DATETIME DESC) = 1 UNION SELECT DISTINCT \tCONCAT(REPLACE(GET(SPLIT(GET(SPLIT(REPLACE(RIY.VALUE:filename::VARCHAR, ' - ', '|'), '|'), 1)::VARCHAR, '.'), 0)::VARCHAR, '-', ''), '01') PERIOD_KEY, \tRIY.VALUE:brand::VARCHAR brand, \tRIY.VALUE:category::VARCHAR category, \tRIY.VALUE:store::VARCHAR ACCOUNT, \t(RIY.VALUE:current_year_shares::NUMBER(38,20)/100)::NUMBER(38,20) MARKET_SHARE_PERCENTAGE, \t0 IS_MONTHLY, \tRIY.VALUE:process_date::VARCHAR PROCESS_DATE, \tMAX(RIY.VALUE:process_datetime::TIMESTAMP_TZ) PROCESS_DATETIME FROM STAGING.RAW_INDOMARET_YEARLY RIY INNER JOIN ( \tSELECT \t\tVALUE:filename::VARCHAR FILENAME, \t\tCONCAT(VALUE:value_year::VARCHAR, (CASE WHEN VALUE:value_month::INTEGER < 10 THEN CONCAT('0', VALUE:value_month::VARCHAR) ELSE VALUE:value_month::VARCHAR END), '01') PERIOD_KEY_REF, \t\tSUM(VALUE:market_shared::NUMBER(38,8)) SUM_SHARE \tFROM STAGING.RAW_INDOMARET_MONTHLY \tWHERE PARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38,0)) FROM STAGING.RAW_INDOMARET_MONTHLY) \tGROUP BY \t\t1, 2 \tHAVING SUM_SHARE > 0 ) SRIM ON RIY.VALUE:filename::VARCHAR = SRIM.FILENAME WHERE RIY.PARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38,0)) FROM STAGING.RAW_INDOMARET_YEARLY) AND LOWER(RIY.VALUE:current_year_shares::VARCHAR) != 'nan' GROUP BY 1, 2, 3, 4, 5, 6, 7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERIOD_KEY, BRAND, CATEGORY, ACCOUNT, IS_MONTHLY ORDER BY PROCESS_DATETIME DESC) = 1 UNION SELECT DISTINCT \tCONCAT(RIM.VALUE:value_year::VARCHAR, (CASE WHEN RIM.VALUE:value_month::INTEGER < 10 THEN CONCAT('0', RIM.VALUE:value_month::VARCHAR) ELSE RIM.VALUE:value_month::VARCHAR END), '01') PERIOD_KEY, \tRIM.VALUE:brand::VARCHAR brand, \tRIM.VALUE:category::VARCHAR category, \tRIM.VALUE:store::VARCHAR ACCOUNT, \t(RIM.VALUE:market_shared::NUMBER(38,20)/100)::NUMBER(38,20) MARKET_SHARE_PERCENTAGE, \t1 IS_MONTHLY, \tRIM.VALUE:process_date::VARCHAR PROCESS_DATE, \tMAX(RIM.VALUE:process_datetime::TIMESTAMP_TZ) PROCESS_DATETIME FROM STAGING.RAW_INDOMARET_MONTHLY RIM INNER JOIN ( \tSELECT \t\tVALUE:filename::VARCHAR FILENAME, \t\tCONCAT(VALUE:value_year::VARCHAR, (CASE WHEN VALUE:value_month::INTEGER < 10 THEN CONCAT('0', VALUE:value_month::VARCHAR) ELSE VALUE:value_month::VARCHAR END), '01') PERIOD_KEY_REF, \t\tSUM(VALUE:market_shared::NUMBER(38,20)) SUM_SHARE \tFROM STAGING.RAW_INDOMARET_MONTHLY \tWHERE PARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38,0)) FROM STAGING.RAW_INDOMARET_MONTHLY) \tGROUP BY \t\t1, 2 \tHAVING SUM_SHARE > 0 ) SRIM ON RIM.VALUE:filename::VARCHAR = SRIM.FILENAME AND CONCAT(RIM.VALUE:value_year::VARCHAR, (CASE WHEN RIM.VALUE:value_month::INTEGER < 10 THEN CONCAT('0', RIM.VALUE:value_month::VARCHAR) ELSE RIM.VALUE:value_month::VARCHAR END), '01') = SRIM.PERIOD_KEY_REF WHERE RIM.PARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38,0)) FROM STAGING.RAW_INDOMARET_MONTHLY) AND LOWER(RIM.VALUE:market_shared::VARCHAR) != 'nan' GROUP BY 1, 2, 3, 4, 5, 6, 7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERIOD_KEY, BRAND, CATEGORY, ACCOUNT, IS_MONTHLY ORDER BY PROCESS_DATETIME DESC) = 1 ) source ON dest.PERIOD_KEY = source.PERIOD_KEY AND dest.BRAND = source.BRAND AND dest.CATEGORY = source.CATEGORY AND dest.ACCOUNT = source.ACCOUNT AND dest.IS_MONTHLY = source.IS_MONTHLY WHEN MATCHED THEN UPDATE SET dest.PERIOD_KEY = source.PERIOD_KEY, dest.BRAND = source.BRAND, dest.CATEGORY = source.CATEGORY, dest.ACCOUNT = source.ACCOUNT, dest.MARKET_SHARE_PERCENTAGE = source.MARKET_SHARE_PERCENTAGE, dest.IS_MONTHLY = source.IS_MONTHLY, dest.PROCESS_DATE = source.PROCESS_DATE, dest.PROCESS_DATETIME = source.PROCESS_DATETIME, dest.UPDATE_TIMESTAMP = CURRENT_TIMESTAMP::TIMESTAMP_TZ WHEN NOT MATCHED THEN INSERT( dest.PERIOD_KEY,  dest.BRAND,  dest.CATEGORY,  dest.ACCOUNT,  dest.MARKET_SHARE_PERCENTAGE,  dest.IS_MONTHLY, dest.PROCESS_DATE,  dest.PROCESS_DATETIME, dest.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP) VALUES( source.PERIOD_KEY,  source.BRAND,  source.CATEGORY,  source.ACCOUNT,  source.MARKET_SHARE_PERCENTAGE,  source.IS_MONTHLY, source.PROCESS_DATE,  source.PROCESS_DATETIME, CURRENT_TIMESTAMP::TIMESTAMP_TZ, CURRENT_TIMESTAMP::TIMESTAMP_TZ )"
+			},
+			"FACT_RETAILER_STORE_COUNT": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.FACT_RETAILER_STORE_COUNT dest USING (   SELECT      DISTINCT SUB.PERIOD_KEY,      SUB.CUSTOMER_DISTRIBUTOR_KEY,      SUB.TOTAL_STORES,      TO_VARCHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') PROCESS_DATE,      CURRENT_TIMESTAMP CREATE_TIMESTAMP,      CURRENT_TIMESTAMP UPDATE_TIMESTAMP,      SUB.PROCESS_DATETIME PROCESS_DATETIME,      SUB.PARTITION_DATE    FROM      (       SELECT          CONCAT(           SUBSTR(             TO_VARCHAR(VALUE:month::DATE, 'YYYYMMDD'),              1,              6           ),            '01'         ) AS PERIOD_KEY,          cd.CUSTOMER_DISTRIBUTOR_KEY,          CASE             WHEN sd.VALUE:no_of_store::STRING IS NOT NULL AND sd.VALUE:no_of_store::STRING != '' THEN sd.VALUE:no_of_store::INTEGER              WHEN sd.VALUE:no_of_stores::STRING IS NOT NULL AND sd.VALUE:no_of_stores::STRING != '' THEN sd.VALUE:no_of_store::INTEGER              ELSE 0::INTEGER         END as TOTAL_STORES,          sd.VALUE:process_datetime::TIMESTAMP_NTZ PROCESS_DATETIME,          sd.PARTITION_DATE PARTITION_DATE        FROM          STAGING.RAW_MAPPING_SELLPO_TO_DC as sd          LEFT JOIN (           SELECT              CUSTOMER_DISTRIBUTOR_KEY,              CUSTOMER_DISTRIBUTOR_CODE            FROM              CORE.DIM_CUSTOMER_DISTRIBUTOR            WHERE              CHANNEL_DESC = 'MMKA'              AND SOURCE_SYSTEM_CODE = 6         ) AS cd ON sd.VALUE:dc_b2b_code::VARCHAR = cd.CUSTOMER_DISTRIBUTOR_CODE        WHERE          LOWER(sd.VALUE:dc_b2b_code::VARCHAR) <> 'nan'          AND sd.PARTITION_DATE = (           SELECT              MAX(PARTITION_DATE)            FROM              STAGING.RAW_MAPPING_SELLPO_TO_DC         )     ) SUB QUALIFY ROW_NUMBER() OVER (       PARTITION BY SUB.PERIOD_KEY,        SUB.CUSTOMER_DISTRIBUTOR_KEY,        SUB.TOTAL_STORES        ORDER BY          SUB.PROCESS_DATETIME DESC     ) = 1 ) source ON dest.PERIOD_KEY = source.PERIOD_KEY  AND dest.CUSTOMER_DISTRIBUTOR_KEY = source.CUSTOMER_DISTRIBUTOR_KEY WHEN MATCHED THEN  UPDATE  SET    dest.PERIOD_KEY = source.PERIOD_KEY,    dest.CUSTOMER_DISTRIBUTOR_KEY = source.CUSTOMER_DISTRIBUTOR_KEY,    dest.TOTAL_STORES = source.TOTAL_STORES,    dest.PROCESS_DATE = source.PROCESS_DATE,    dest.CREATE_TIMESTAMP = source.CREATE_TIMESTAMP,    dest.UPDATE_TIMESTAMP = source.UPDATE_TIMESTAMP,    dest.PROCESS_DATETIME = source.PROCESS_DATETIME,    dest.PARTITION_DATE = source.PARTITION_DATE WHEN NOT MATCHED THEN INSERT(     dest.PERIOD_KEY, dest.CUSTOMER_DISTRIBUTOR_KEY,      dest.TOTAL_STORES, dest.PROCESS_DATE,      dest.CREATE_TIMESTAMP, dest.UPDATE_TIMESTAMP,      dest.PROCESS_DATETIME, dest.PARTITION_DATE   )  VALUES    (     source.PERIOD_KEY, source.CUSTOMER_DISTRIBUTOR_KEY,      source.TOTAL_STORES, source.PROCESS_DATE,      source.CREATE_TIMESTAMP, source.UPDATE_TIMESTAMP,      source.PROCESS_DATETIME, source.PARTITION_DATE   )"
+			},
+			"UPDATE_MARKET_SHARE": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_MARKET_SHARE SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"UPDATE_RETURN": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_RETURN SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"UPDATE_SECONDARY_SALES": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_SECONDARY_SALES SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"UPDATE_SERVICE_LEVEL": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_SERVICE_LEVEL SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"UPDATE_STOCK": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_STOCK SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"UPDATE_STORE_COUNT": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_STORE_COUNT SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"UPDATE_TERTIARY_SALES": {
+				"type": "String",
+				"defaultValue": "UPDATE CORE.FACT_RETAILER_TERTIARY_SALES SET NEW_PERIOD_KEY = TO_VARCHAR(DATEADD(day, -1, ADD_MONTHS(TO_DATE(PERIOD_KEY::STRING, 'YYYYMMDD'), 1)), 'YYYYMMDD') WHERE NEW_PERIOD_KEY IS NULL;"
+			},
+			"DIM_DISTRIBUTOR_HIST": {
+				"type": "String",
+				"defaultValue": "INSERT INTO CORE.DIM_DISTRIBUTOR_HIST SELECT     VALUE:Distributor_Key::NUMBER DISTRIBUTOR_KEY,     VALUE:Distributor_Id::VARCHAR DISTRIBUTOR_ID,     VALUE:Distributor_Name::VARCHAR DISTRIBUTOR_NAME,     VALUE:Warehouse_Id::VARCHAR WAREHOUSE_ID,     VALUE:Warehouse_Name::VARCHAR WAREHOUSE_NAME,     VALUE:Distributor_Head::VARCHAR DISTRIBUTOR_HEAD,     VALUE:Area_Head::VARCHAR AREA_HEAD,     VALUE:Region_Source::VARCHAR REGION_SOURCE,     VALUE:Group_Name::VARCHAR GROUP_NAME,     VALUE:Distributor_Area_Id::VARCHAR DISTRIBUTOR_AREA_ID,     VALUE:Distributor_Area_Name::VARCHAR DISTRIBUTOR_AREA_NAME,     VALUE:Source_System_Code::VARCHAR SOURCE_SYSTEM_CODE,     VALUE:Upload_Date::TIMESTAMP_NTZ UPLOAD_DATE,     VALUE:process_date::VARCHAR PROCESS_DATE,     VALUE:Create_Timestamp::TIMESTAMP_NTZ CREATE_TIMESTAMP,     VALUE:Update_Timestamp::TIMESTAMP_NTZ UPDATE_TIMESTAMP,     VALUE:process_datetime::TIMESTAMP_NTZ PROCESS_DATETIME FROM STAGING.RAW_DIM_DISTRIBUTOR WHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_DIM_DISTRIBUTOR)"
+			},
+			"DELETE_EXISTING_FACT_RETAILER_STOCK": {
+				"type": "String",
+				"defaultValue": "DELETE FROM CORE.FACT_RETAILER_STOCK WHERE PERIOD_KEY::STRING IN( \tSELECT DISTINCT  \t\tVALUE:Period_Key::STRING  \tFROM STAGING.RAW_FACT_STOCK_RETAILER  \tWHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER) )"
+			},
+			"FACT_RETAILER_STOCK": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tCORE.FACT_RETAILER_STOCK dest \t\tUSING ( \tSELECT \t\tDISTINCT CAST($1:Period_Key AS NUMBER(38, \t\t0)) Period_Key, \t\tCAST($1:Product_Key AS NUMBER(38, \t\t0)) Product_Key, \t\tCAST($1:Customer_Key AS NUMBER(38, \t\t0)) Customer_Key, \t\tCAST($1:Area_Key AS NUMBER(38, \t\t0)) Area_Key, \t\tCAST($1:Type_Key AS NUMBER(38, \t\t0)) Type_Key, \t\tCAST($1:Distributor_Key AS NUMBER(38, \t\t0)) Distributor_Key, \t\tCAST($1:SOHinPCS AS NUMBER(38, \t\t8)) SOHinPCS, \t\tCAST($1:SOHinCAR AS NUMBER(38, \t\t8)) SOHinCAR, \t\tCAST($1:SOHinKG AS NUMBER(38, \t\t8)) SOHinKG, \t\tCAST($1:SOHinTON AS NUMBER(38, \t\t8)) SOHinTON, \t\tCAST($1:SOHin400Gr AS NUMBER(38, \t\t8)) SOHin400Gr, \t\tCAST($1:SOHinVal AS NUMBER(38, \t\t8)) SOHinVal, \t\tCAST($1:SOHinRealVal AS NUMBER(38, \t\t8)) SOHinRealVal, \t\tCAST($1:PriceRBP AS NUMBER(38, \t\t8)) PriceRBP, \t\tCAST($1:Source_System_Code AS NUMBER(38, \t\t0)) Source_System_Code, \t\tCAST($1:Upload_Date AS TIMESTAMP_NTZ) Upload_Date, \t\tCAST($1:process_date AS VARCHAR) process_date, \t\tCAST($1:Create_Timestamp AS TIMESTAMP_NTZ) Create_Timestamp, \t\tCAST($1:Update_Timestamp AS TIMESTAMP_NTZ) Update_Timestamp, \t\tCAST($1:process_datetime AS TIMESTAMP_NTZ) process_datetime \tFROM \t\tSTAGING.RAW_FACT_STOCK_RETAILER \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tSTAGING.RAW_FACT_STOCK_RETAILER) QUALIFY ROW_NUMBER() OVER (PARTITION BY Period_Key, \t\tProduct_Key, \t\tCustomer_Key, \t\tArea_Key, \t\tType_Key, \t\tDistributor_Key \tORDER BY \t\tPROCESS_DATE DESC) = 1 ) SOURCE ON \tdest.PERIOD_KEY = source.Period_Key \tAND dest.PRODUCT_KEY = source.Product_Key \tAND dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key \tAND dest.AREA_KEY = source.Area_Key \tAND dest.TYPE_KEY = source.Type_Key \tAND dest.DISTRIBUTOR_KEY = source.Distributor_Key \tWHEN MATCHED THEN UPDATE SET \tdest.PERIOD_KEY = source.Period_Key, \tdest.PRODUCT_KEY = source.Product_Key, \tdest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key, \tdest.AREA_KEY = source.Area_Key, \tdest.TYPE_KEY = source.Type_Key, \tdest.DISTRIBUTOR_KEY = source.Distributor_Key, \tdest.SOH_IN_PCS = source.SOHinPCS, \tdest.SOH_IN_CAR = source.SOHinCAR, \tdest.SOH_IN_KG = source.SOHinKG, \tdest.SOH_IN_TON = source.SOHinTON, \tdest.SOH_IN_400GR = source.SOHin400Gr, \tdest.SOH_IN_VAL = source.SOHinVal, \tdest.SOH_IN_REAL_VAL = source.SOHinRealVal, \tdest.PRICE_RBP = source.PriceRBP, \tdest.SOURCE_SYSTEM_CODE = source.Source_System_Code, \tdest.UPLOAD_DATE = source.Upload_Date, \tdest.PROCESS_DATE = source.process_date, \tdest.CREATE_TIMESTAMP = source.Create_Timestamp, \tdest.UPDATE_TIMESTAMP = source.Update_Timestamp, \tdest.PROCESS_DATETIME = source.process_datetime \tWHEN NOT MATCHED THEN INSERT \t( dest.period_key, \tdest.product_key, \tdest.customer_distributor_key, \tdest.area_key, \tdest.type_key, \tdest.distributor_key, \tdest.soh_in_pcs, \tdest.soh_in_car, \tdest.soh_in_kg, \tdest.soh_in_ton, \tdest.soh_in_400gr, \tdest.soh_in_val, \tdest.soh_in_real_val, \tdest.price_rbp, \tdest.source_system_code, \tdest.upload_date, \tdest.process_date, \tdest.create_timestamp, \tdest.update_timestamp, \tdest.process_datetime) VALUES( source.Period_Key, source.Product_Key, source.Customer_Key, source.Area_Key, source.Type_Key, source.Distributor_Key, source.SOHinPCS, source.SOHinCAR, source.SOHinKG, source.SOHinTON, source.SOHin400Gr, source.SOHinVal, source.SOHinRealVal, source.PriceRBP, source.Source_System_Code, source.Upload_Date, source.process_date, source.Create_Timestamp, source.Update_Timestamp, source.process_datetime);"
+			},
+			"DELETE_EXISTING_FACT_RETAILER_TERTIARY_SALES": {
+				"type": "String",
+				"defaultValue": "DELETE FROM CORE.FACT_RETAILER_TERTIARY_SALES WHERE PERIOD_KEY::STRING IN( \tSELECT DISTINCT  \t\tVALUE:Period_Key::STRING  \tFROM STAGING.RAW_FACT_STOCK_RETAILER  \tWHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER) )"
+			},
+			"FACT_RETAILER_TERTIARY_SALES": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.FACT_RETAILER_TERTIARY_SALES dest USING ( SELECT DISTINCT CAST($1:Period_Key AS NUMBER(38,0)) Period_Key, CAST($1:Product_Key AS NUMBER(38,0)) Product_Key, CAST($1:Customer_Key AS NUMBER(38,0)) Customer_Key, CAST($1:Area_Key AS NUMBER(38,0)) Area_Key, CAST($1:Type_Key AS NUMBER(38,0)) Type_Key, CAST($1:Distributor_Key AS NUMBER(38,0)) Distributor_Key, CAST($1:SALESinPCS AS NUMBER(38,8)) SALESinPCS, CAST($1:SALESinCAR AS NUMBER(38,8)) SALESinCAR, CAST($1:SALESinKG AS NUMBER(38,8)) SALESinKG, CAST($1:SALESinTON AS NUMBER(38,8)) SALESinTON, CAST($1:SALESin400Gr AS NUMBER(38,8)) SALESin400Gr, CAST($1:SALESinVal AS NUMBER(38,8)) SALESinVal, CAST($1:SALESinRealVal AS NUMBER(38,8)) SALESinRealVal, CAST($1:PriceRBP AS NUMBER(38,8)) PriceRBP, CAST($1:Source_System_Code AS NUMBER(38,0)) Source_System_Code, CAST($1:Upload_Date AS TIMESTAMP_NTZ) Upload_Date, CAST($1:process_date AS VARCHAR) process_date, CAST($1:Create_Timestamp AS TIMESTAMP_NTZ) Create_Timestamp, CAST($1:Update_Timestamp AS TIMESTAMP_NTZ) Update_Timestamp, CAST($1:process_datetime AS TIMESTAMP_NTZ) process_datetime FROM STAGING.RAW_FACT_STOCK_RETAILER WHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER) QUALIFY ROW_NUMBER() OVER (PARTITION BY Period_Key, Product_Key, Customer_Key, Area_Key, Type_Key, Distributor_Key ORDER BY PROCESS_DATE DESC) = 1 ) source ON dest.PERIOD_KEY = source.Period_Key AND dest.PRODUCT_KEY = source.Product_Key AND dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key AND dest.AREA_KEY = source.Area_Key AND dest.TYPE_KEY = source.Type_Key AND dest.DISTRIBUTOR_KEY = source.Distributor_Key WHEN MATCHED THEN UPDATE SET dest.PERIOD_KEY = source.Period_Key, dest.PRODUCT_KEY = source.Product_Key, dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key, dest.AREA_KEY = source.Area_Key, dest.TYPE_KEY = source.Type_Key, dest.DISTRIBUTOR_KEY = source.Distributor_Key, dest.SALES_IN_PCS = source.SALESinPCS, dest.SALES_IN_CAR = source.SALESinCAR, dest.SALES_IN_KG = source.SALESinKG, dest.SALES_IN_TON = source.SALESinTON, dest.SALES_IN_400GR = source.SALESin400Gr, dest.SALES_IN_VAL = source.SALESinVal, dest.SALES_IN_REAL_VAL = source.SALESinRealVal, dest.PRICE_RBP = source.PriceRBP, dest.SOURCE_SYSTEM_CODE = source.Source_System_Code, dest.UPLOAD_DATE = source.Upload_Date, dest.PROCESS_DATE = source.process_date, dest.CREATE_TIMESTAMP = source.Create_Timestamp, dest.UPDATE_TIMESTAMP = source.Update_Timestamp, dest.PROCESS_DATETIME = source.process_datetime WHEN NOT MATCHED THEN INSERT( dest.period_key, dest.product_key, dest.customer_distributor_key, dest.area_key, dest.type_key, dest.distributor_key, dest.sales_in_pcs, dest.sales_in_car, dest.sales_in_kg, dest.sales_in_ton, dest.sales_in_400gr, dest.sales_in_val, dest.sales_in_real_val, dest.price_rbp, dest.source_system_code, dest.upload_date, dest.process_date, dest.create_timestamp, dest.update_timestamp, dest.process_datetime) VALUES( source.Period_Key, source.Product_Key, source.Customer_Key, source.Area_Key, source.Type_Key, source.Distributor_Key, source.SALESinPCS, source.SALESinCAR, source.SALESinKG, source.SALESinTON, source.SALESin400Gr, source.SALESinVal, source.SALESinRealVal, source.PriceRBP, source.Source_System_Code, source.Upload_Date, source.process_date, source.Create_Timestamp, source.Update_Timestamp, source.process_datetime)"
+			},
+			"DELETE_EXISTING_RETAILER_RETURN": {
+				"type": "String",
+				"defaultValue": "DELETE FROM CORE.FACT_RETAILER_RETURN WHERE PERIOD_KEY::STRING IN( \tSELECT DISTINCT  \t\tVALUE:Period_Key::STRING  \tFROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN \tWHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN) )"
+			},
+			"FACT_RETAILER_RETURN": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.FACT_RETAILER_RETURN dest USING ( SELECT DISTINCT CAST($1:Period_Key AS NUMBER(38,0)) Period_Key, CAST($1:Product_Key AS NUMBER(38,0)) Product_Key, CAST($1:Customer_Key AS NUMBER(38,0)) Customer_Key, CAST($1:Area_Key AS NUMBER(38,0)) Area_Key, CAST($1:Type_Key AS NUMBER(38,0)) Type_Key, CAST($1:Distributor_Key AS NUMBER(38,0)) Distributor_Key, CAST($1:ReceiptinPCS AS NUMBER(38,8)) ReceiptinPCS, CAST($1:ReceiptInCar AS NUMBER(38,8)) ReceiptInCar, CAST($1:ReceiptInKg AS NUMBER(38,8)) ReceiptInKg, CAST($1:ReceiptInTON AS NUMBER(38,8)) ReceiptInTON, CAST($1:ReceiptInAccValue AS NUMBER(38,8)) ReceiptInAccValue, CAST($1:ReturnInPCS AS NUMBER(38,8)) ReturnInPCS, CAST($1:ReturnInCar AS NUMBER(38,8)) ReturnInCar, CAST($1:ReturnInKg AS NUMBER(38,8)) ReturnInKg, CAST($1:ReturnInTON AS NUMBER(38,8)) ReturnInTON, CAST($1:ReturnInAccValue AS NUMBER(38,8)) ReturnInAccValue, CAST($1:ReturnPriceRBP AS NUMBER(38,8)) ReturnPriceRBP, CAST($1:ReceiptPriceRBP AS NUMBER(38,8)) ReceiptPriceRBP, CAST($1:ReturnPriceCBP AS NUMBER(38,8)) ReturnPriceCBP, CAST($1:ReceiptPriceCBP AS NUMBER(38,8)) ReceiptPriceCBP, CAST($1:Source_System_Code AS NUMBER(38,0)) Source_System_Code, CAST($1:Upload_By AS VARCHAR) Upload_By, CAST($1:Upload_Date AS TIMESTAMP_NTZ) Upload_Date, CAST($1:process_date AS TIMESTAMP_NTZ) process_date, CAST($1:Create_Timestamp AS TIMESTAMP_NTZ) Create_Timestamp, CAST($1:Update_Timestamp AS TIMESTAMP_NTZ) Update_Timestamp, CAST($1:process_datetime AS TIMESTAMP_NTZ) process_datetime FROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN WHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN) QUALIFY ROW_NUMBER() OVER (PARTITION BY Period_Key, Product_Key, Customer_Key, Area_Key, Type_Key, Distributor_Key ORDER BY PROCESS_DATE DESC) = 1 ) source ON dest.PERIOD_KEY = source.Period_Key AND dest.PRODUCT_KEY = source.Product_Key AND dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key AND dest.AREA_KEY = source.Area_Key AND dest.TYPE_KEY = source.Type_Key AND dest.DISTRIBUTOR_KEY = source.Distributor_Key WHEN MATCHED THEN UPDATE SET dest.PERIOD_KEY = source.Period_Key, dest.PRODUCT_KEY = source.Product_Key, dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key, dest.AREA_KEY = source.Area_Key, dest.TYPE_KEY = source.Type_Key, dest.DISTRIBUTOR_KEY = source.Distributor_Key, dest.RECEIPT_IN_PCS = source.ReceiptinPCS, dest.RECEIPT_IN_CAR = source.ReceiptInCar, dest.RECEIPT_IN_KG = source.ReceiptInKg, dest.RECEIPT_IN_TON = source.ReceiptInTON, dest.RECEIPT_IN_ACC_VALUE = source.ReceiptInAccValue, dest.RETURN_IN_PCS = source.ReturnInPCS, dest.RETURN_IN_CAR = source.ReturnInCar, dest.RETURN_IN_KG = source.ReturnInKg, dest.RETURN_IN_TON = source.ReturnInTON, dest.RETURN_IN_ACC_VALUE = source.ReturnInAccValue, dest.RETURN_PRICE_RBP = source.ReturnPriceRBP, dest.RECEIPT_PRICE_RBP = source.ReceiptPriceRBP, dest.RETURN_PRICE_CBP = source.ReturnPriceCBP, dest.RECEIPT_PRICE_CBP = source.ReceiptPriceCBP, dest.SOURCE_SYSTEM_CODE = source.Source_System_Code, dest.UPLOAD_BY = source.Upload_By, dest.UPLOAD_DATE = source.Upload_Date, dest.PROCESS_DATE = source.process_date, dest.CREATE_TIMESTAMP = source.Create_Timestamp, dest.UPDATE_TIMESTAMP = source.Update_Timestamp, dest.PROCESS_DATETIME = source.process_datetime WHEN NOT MATCHED THEN INSERT( dest.period_key, dest.product_key, dest.customer_distributor_key, dest.area_key, dest.type_key, dest.distributor_key, dest.receipt_in_pcs, dest.receipt_in_car, dest.receipt_in_kg, dest.receipt_in_ton, dest.receipt_in_acc_value, dest.return_in_pcs, dest.return_in_car, dest.return_in_kg, dest.return_in_ton, dest.return_in_acc_value, dest.return_price_rbp, dest.receipt_price_rbp, dest.return_price_cbp, dest.receipt_price_cbp, dest.source_system_code, dest.upload_by, dest.upload_date, dest.process_date, dest.create_timestamp, dest.update_timestamp, dest.process_datetime) VALUES( source.Period_Key, source.Product_Key, source.Customer_Key, source.Area_Key, source.Type_Key, source.Distributor_Key, source.ReceiptinPCS, source.ReceiptInCar, source.ReceiptInKg, source.ReceiptInTON, source.ReceiptInAccValue, source.ReturnInPCS, source.ReturnInCar, source.ReturnInKg, source.ReturnInTON, source.ReturnInAccValue, source.ReturnPriceRBP, source.ReceiptPriceRBP, source.ReturnPriceCBP, source.ReceiptPriceCBP, source.Source_System_Code, source.Upload_By, source.Upload_Date, source.process_date, source.Create_Timestamp, source.Update_Timestamp, source.process_datetime)"
+			},
+			"DELETE_EXISTING_RETAILER_SECONDARY_SALES": {
+				"type": "String",
+				"defaultValue": "DELETE FROM CORE.FACT_RETAILER_SECONDARY_SALES WHERE PERIOD_KEY::STRING IN( \tSELECT DISTINCT  \t\tVALUE:Period_Key::STRING  \tFROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN \tWHERE PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN) )"
+			},
+			"FACT_RETAILER_SECONDARY_SALES": {
+				"type": "String",
+				"defaultValue": "MERGE INTO CORE.FACT_RETAILER_SECONDARY_SALES dest USING (   SELECT      DISTINCT CAST($1 : Period_Key AS NUMBER(38, 0)) Period_Key,      CAST($1 : Product_Key AS NUMBER(38, 0)) Product_Key,      CAST($1 : Customer_Key AS NUMBER(38, 0)) Customer_Key,      CAST($1 : Area_Key AS NUMBER(38, 0)) Area_Key,      CAST($1 : Type_Key AS NUMBER(38, 0)) Type_Key,      CAST($1 : Distributor_Key AS NUMBER(38, 0)) Distributor_Key,      CAST($1 : SIinPCS AS NUMBER(38, 8)) SIinPCS,      CAST($1 : SIinCar AS NUMBER(38, 8)) SIinCar,      CAST($1 : SIinInKg AS NUMBER(38, 8)) SIinInKg,      CAST($1 : SIinTON AS NUMBER(38, 8)) SIinTON,      CAST($1 : SIinAccValue AS NUMBER(38, 8)) SIinAccValue,      CAST($1 : SIPriceRBP AS NUMBER(38, 8)) SIPriceRBP,      CAST($1 : SIPriceCBP AS NUMBER(38, 8)) SIPriceCBP,      CAST($1 : Source_System_Code AS NUMBER(38, 0)) Source_System_Code,      CAST($1 : Upload_By AS VARCHAR) Upload_By,      CAST($1 : Upload_Date AS TIMESTAMP_NTZ) Upload_Date,      CAST($1 : process_date AS TIMESTAMP_NTZ) process_date,      CAST($1 : Create_Timestamp AS TIMESTAMP_NTZ) Create_Timestamp,      CAST($1 : Update_Timestamp AS TIMESTAMP_NTZ) Update_Timestamp,      CAST($1 : process_datetime AS TIMESTAMP_NTZ) process_datetime    FROM      STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN    WHERE      PARTITION_DATE = (SELECT MAX(PARTITION_DATE) FROM STAGING.RAW_FACT_STOCK_RETAILER_SELLINGIN_RETURN) QUALIFY ROW_NUMBER() OVER (       PARTITION BY Period_Key,        Product_Key,        Customer_Key,        Area_Key,        Type_Key,        Distributor_Key        ORDER BY          PROCESS_DATE DESC     ) = 1 ) source ON dest.PERIOD_KEY = source.Period_Key  AND dest.PRODUCT_KEY = source.Product_Key  AND dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key  AND dest.AREA_KEY = source.Area_Key  AND dest.TYPE_KEY = source.Type_Key  AND dest.DISTRIBUTOR_KEY = source.Distributor_Key WHEN MATCHED THEN  UPDATE  SET    dest.PERIOD_KEY = source.Period_Key,    dest.PRODUCT_KEY = source.Product_Key,    dest.CUSTOMER_DISTRIBUTOR_KEY = source.Customer_Key,    dest.AREA_KEY = source.Area_Key,    dest.TYPE_KEY = source.Type_Key,    dest.DISTRIBUTOR_KEY = source.Distributor_Key,    dest.SL_IN_PCS = source.SIinPCS,    dest.SL_IN_CAR = source.SIinCar,    dest.SL_IN_KG = source.SIinInKg,    dest.SL_IN_TON = source.SIinTON,    dest.SL_IN_ACC_VALUE = source.SIinAccValue,    dest.SL_PRICE_RBP = source.SIPriceRBP,    dest.SL_PRICE_CBP = source.SIPriceCBP,    dest.SOURCE_SYSTEM_CODE = source.Source_System_Code,    dest.UPLOAD_BY = source.Upload_By,    dest.UPLOAD_DATE = source.Upload_Date,    dest.PROCESS_DATE = source.process_date,    dest.CREATE_TIMESTAMP = source.Create_Timestamp,    dest.UPDATE_TIMESTAMP = source.Update_Timestamp,    dest.PROCESS_DATETIME = source.process_datetime WHEN NOT MATCHED THEN INSERT(     dest.period_key, dest.product_key,      dest.customer_distributor_key,      dest.area_key, dest.type_key, dest.distributor_key,      dest.sl_in_pcs, dest.sl_in_car,      dest.sl_in_kg, dest.sl_in_ton, dest.sl_in_acc_value,      dest.sl_price_rbp, dest.sl_price_cbp,      dest.source_system_code, dest.upload_by,      dest.upload_date, dest.process_date,      dest.create_timestamp, dest.update_timestamp,      dest.process_datetime   )  VALUES    (     source.Period_Key, source.Product_Key,      source.Customer_Key, source.Area_Key,      source.Type_Key, source.Distributor_Key,      source.SIinPCS, source.SIinCar,      source.SIinInKg, source.SIinTON,      source.SIinAccValue, source.SIPriceRBP,      source.SIPriceCBP, source.Source_System_Code,      source.Upload_By, source.Upload_Date,      source.process_date, source.Create_Timestamp,      source.Update_Timestamp, source.process_datetime   )"
+			}
+		},
+		"annotations": [
+			"SFE",
+			"CORE"
+		],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

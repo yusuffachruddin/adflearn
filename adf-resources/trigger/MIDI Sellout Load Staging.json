@@ -1,0 +1,60 @@
+{
+	"name": "MIDI Sellout Load Staging",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "sellout_alfamidi",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "sellout"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "sellout_alfamidi",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "sellout",
+					"source_system": "MKA",
+					"schema": "IDN_STG_MKA"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-01T06:48:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						19
+					]
+				}
+			}
+		}
+	}
+}

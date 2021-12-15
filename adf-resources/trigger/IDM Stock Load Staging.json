@@ -1,0 +1,60 @@
+{
+	"name": "IDM Stock Load Staging",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "stock_indomaret",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "stock"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "stock_indomaret",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "stock",
+					"source_system": "MKA",
+					"schema": "IDN_STG_MKA"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-10T04:02:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						5
+					],
+					"hours": [
+						19
+					]
+				}
+			}
+		}
+	}
+}

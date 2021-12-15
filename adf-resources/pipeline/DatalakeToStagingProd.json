@@ -1,0 +1,132 @@
+{
+	"name": "DatalakeToStagingProd",
+	"properties": {
+		"activities": [
+			{
+				"name": "Datalake to Staging Prod",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowflake Datalake to Staging Prod",
+					"baseParameters": {
+						"mode": {
+							"value": "@pipeline().parameters.mode",
+							"type": "Expression"
+						},
+						"blob": {
+							"value": "@pipeline().parameters.blob",
+							"type": "Expression"
+						},
+						"sf_schema": {
+							"value": "@pipeline().parameters.sf_schema",
+							"type": "Expression"
+						},
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"sf_credential": {
+							"value": "@variables('sf_credential')",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"file_format": {
+							"value": "@pipeline().parameters.file_format",
+							"type": "Expression"
+						},
+						"storage_integration": {
+							"value": "@pipeline().parameters.storage_integration",
+							"type": "Expression"
+						},
+						"stage_name": {
+							"value": "@pipeline().parameters.stage_name",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@pipeline().parameters.table_list",
+							"type": "Expression"
+						},
+						"source_system": {
+							"value": "@pipeline().parameters.source_system_trigram",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"mode": {
+				"type": "string",
+				"defaultValue": "external"
+			},
+			"blob": {
+				"type": "string",
+				"defaultValue": "tsmmka"
+			},
+			"sf_schema": {
+				"type": "string",
+				"defaultValue": "IDN_STG_TSM"
+			},
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "curated"
+			},
+			"file_format": {
+				"type": "string",
+				"defaultValue": "sfe_parquet"
+			},
+			"storage_integration": {
+				"type": "string",
+				"defaultValue": "dev_spoke_apac_uc_sfe"
+			},
+			"stage_name": {
+				"type": "string",
+				"defaultValue": "sfe_stage"
+			},
+			"table_list": {
+				"type": "string",
+				"defaultValue": "['dboDim_Area_GeoCity.csv', 'dboDim_Area.csv', 'dboDim_Brand.csv', 'dboDim_Customer_Distributor.csv', 'dboDim_Distributor.csv', 'dboDim_Period.csv', 'dboDim_Product.csv', 'dboDim_Type.csv', 'dboFact_Sales_Target_SS.csv', 'dboFact_Stock_Retailer_SellingIn_Return.csv', 'dboFact_Stock_Retailer_ServiceLevel.csv', 'dboFact_Stock_Retailer.csv']"
+			},
+			"source_system_trigram": {
+				"type": "string",
+				"defaultValue": "BTZ"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"sf_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential_sfe_idn.json"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

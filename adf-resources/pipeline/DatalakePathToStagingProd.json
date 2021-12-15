@@ -1,0 +1,132 @@
+{
+	"name": "DatalakePathToStagingProd",
+	"properties": {
+		"activities": [
+			{
+				"name": "Datalake Path to Staging Prod",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowflake Datalake  Path to Staging Prod",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"mode": {
+							"value": "@pipeline().parameters.mode",
+							"type": "Expression"
+						},
+						"blob": {
+							"value": "@pipeline().parameters.blob",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"file_format": {
+							"value": "@pipeline().parameters.file_format",
+							"type": "Expression"
+						},
+						"storage_integration": {
+							"value": "@pipeline().parameters.storage_integration",
+							"type": "Expression"
+						},
+						"stage_name": {
+							"value": "@pipeline().parameters.stage",
+							"type": "Expression"
+						},
+						"table": {
+							"value": "@pipeline().parameters.table_storage",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"sf_credential": {
+							"value": "@variables('sf_credential')",
+							"type": "Expression"
+						},
+						"source_system": {
+							"value": "@pipeline().parameters.source_system",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "<dss-sfe or dss-hcpmce>"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "curated"
+			},
+			"table_storage": {
+				"type": "string",
+				"defaultValue": "<table directory in datalake>"
+			},
+			"mode": {
+				"type": "string",
+				"defaultValue": "external"
+			},
+			"file_format": {
+				"type": "string",
+				"defaultValue": "sfe_parquet"
+			},
+			"storage_integration": {
+				"type": "string",
+				"defaultValue": "dev_spoke_apac_uc_sfe"
+			},
+			"stage": {
+				"type": "string",
+				"defaultValue": "sfe_stage"
+			},
+			"blob": {
+				"type": "string",
+				"defaultValue": "tsmmka"
+			},
+			"source_system": {
+				"type": "string",
+				"defaultValue": "BTZ"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "<IDN_STG_MKA, IDN_STG_TSM, etc>"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"sf_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential_sfe_idn.json"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

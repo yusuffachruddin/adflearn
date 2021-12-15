@@ -1,0 +1,625 @@
+{
+	"name": "IDN_DMT_SFE_SingleQueryCoreLoading",
+	"properties": {
+		"description": "Run query at Snowflake at once",
+		"activities": [
+			{
+				"name": "DIM_BRAND_MARKET_SHARE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_BRAND_MARKET_SHARE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_RETAILER_DC_SELLPO",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_PRODUCT_CHANNEL_TARGET",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_RETAILER_DC_SELLPO')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_PRODUCT_CHANNEL_CORE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_BRAND_MARKET_SHARE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_PRODUCT_CHANNEL_CORE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_PRODUCT_CHANNEL_TARGET",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_PRODUCT_CHANNEL_CORE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_PRODUCT_CHANNEL_TARGET')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_MARKET_SHARE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_RETAILER_DC_SELLPO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_MARKET_SHARE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACT_RETAILER_STORE_COUNT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FACT_RETAILER_MARKET_SHARE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('FACT_RETAILER_STORE_COUNT')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_BRAND",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_BRAND')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_PRODUCT_MS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_PRODUCT_MS')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_TYPE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_TYPE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "DIM_DISTRIBUTOR_HIST",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('DIM_DISTRIBUTOR_HIST')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "F_BTZ_SND_MKS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('F_BTZ_SND_MKS')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_SND_RDS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_SND_RDS')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "IDN_DMT_SFE"
+			}
+		},
+		"variables": {
+			"rsa_private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"db_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential_sfe_idn.json"
+			},
+			"DIM_BRAND_MARKET_SHARE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tDEV_IDN.IDN_DMT_SFE.R_BTZ_SND_BMS dest \t\tUSING ( \tSELECT \t\tCAST(VALUE:category AS VARCHAR) CAT, \t\tCAST(VALUE:brand AS VARCHAR) BRA, \t\tCAST(VALUE:segment AS VARCHAR) SEG, \t\tCAST(VALUE:STAGE AS VARCHAR) STA, \t\tCAST(VALUE:manufacturer AS VARCHAR) MAN, \t\tCAST(VALUE:group_brand AS VARCHAR) GRO_BRA, \t\tCAST(VALUE:ACCOUNT AS VARCHAR) ACC, \t\tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) CRE_TIM, \t\tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) UPD_TIM, \t\tCAST(VALUE:process_date AS VARCHAR) PRO_DAT, \t\tCAST(VALUE:process_datetime AS TIMESTAMP_NTZ) PRO_ATE \tFROM \t\tDEV_IDN.IDN_STG_TSM.S_MKA_MAPPING_BRAND_TO_MS QUALIFY ROW_NUMBER() OVER (PARTITION BY CAT, \t\tBRA, \t\tSEG, \t\tACC \tORDER BY \t\tPRO_ATE DESC) = 1 ) SOURCE ON \tdest.CAT = source.CAT \tAND dest.BRA = source.BRA \tAND dest.SEG = source.SEG \tAND dest.ACC = source.ACC \tWHEN MATCHED THEN UPDATE SET \tdest.CAT = source.CAT, \tdest.BRA = source.BRA, \tdest.SEG = source.SEG, \tdest.STA = source.STA, \tdest.MAN = source.MAN, \tdest.GRO_BRA = source.GRO_BRA, \tdest.ACC = source.ACC, \tdest.CRE_TIM = source.CRE_TIM, \tdest.UPD_TIM = source.UPD_TIM, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE \tWHEN NOT MATCHED THEN INSERT \t( dest.CAT, \tdest.BRA, \tdest.SEG, \tdest.STA, \tdest.MAN, \tdest.GRO_BRA, \tdest.ACC, \tdest.CRE_TIM, \tdest.UPD_TIM, \tdest.PRO_DAT, \tdest.PRO_ATE) VALUES( source.CAT, source.BRA, source.SEG, source.STA, source.MAN, source.GRO_BRA, source.ACC, source.CRE_TIM, source.UPD_TIM, source.PRO_DAT, source.PRO_ATE );"
+			},
+			"DIM_PRODUCT_CHANNEL_CORE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tDEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PCC dest \t\tUSING ( \tSELECT \t\ttb.PRO_KEY PRO_KEY, \t\tCAST(ta.VALUE:channel AS VARCHAR) CHA, \t\tCASE \t\t\tWHEN CAST(ta.VALUE:sku_core AS VARCHAR) = 'CORE' THEN TRUE \t\t\tELSE FALSE \t\tEND COR_FLA, \t\tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) CRE_TIM, \t\tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) UPD_TIM, \t\tCAST(ta.VALUE:process_date AS VARCHAR) PRO_DAT, \t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PRO_ATE, \t\tta.PARTITION_DATE PAR_DAT \tFROM \t\tDEV_IDN.IDN_STG_TSM.S_MKA_MAPPING_SKU_CORE ta \tJOIN DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PRD tb ON \t\tCAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR) \tWHERE \t\ttb.SOU_SYS_COD IN ('0', '6') \t\tAND tb.PRO_TYP != 'COMPETITOR' \t\tAND tb.SKU_ORI_DES != 'OLD PRODUCT' \t\tAND ta.PARTITION_DATE = ( \t\tSELECT \t\t\tCAST(MAX(PARTITION_DATE) AS VARCHAR) \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE) QUALIFY ROW_NUMBER() OVER (PARTITION BY PRO_KEY, \t\tCHA \tORDER BY \t\tPRO_ATE DESC) = 1 ) SOURCE ON \tdest.PRO_KEY = source.PRO_KEY \tAND dest.CHA = source.CHA \tWHEN MATCHED THEN UPDATE SET \tdest.PRO_KEY = source.PRO_KEY, \tdest.CHA = source.CHA, \tdest.COR_FLA = source.COR_FLA, \tdest.CRE_TIM = source.CRE_TIM, \tdest.UPD_TIM = source.UPD_TIM, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.PRO_KEY, \tdest.CHA, \tdest.COR_FLA, \tdest.CRE_TIM, \tdest.UPD_TIM, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT) VALUES( source.PRO_KEY, source.CHA, source.COR_FLA, source.CRE_TIM, source.UPD_TIM, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT );"
+			},
+			"DIM_PRODUCT_CHANNEL_TARGET": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tDEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PCT dest \t\tUSING ( \tSELECT \t\tSUB_A.PRO_KEY PRO_KEY, \t\tSUB_A.CHANNEL CHA, \t\tSUB_A.TARGET_TYPE TAR_TYP, \t\tSUB_A.TARGET TAR, \t\tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) CRE_TIM, \t\tCAST(CURRENT_TIMESTAMP AS TIMESTAMP_NTZ) UPD_TIM, \t\tSUB_A.PROCESS_DATE PRO_DAT, \t\tSUB_A.PROCESS_DATETIME PRO_ATE, \t\tSUB_A.PARTITION_DATE PAR_DAT \tFROM \t\t( \t\tSELECT \t\t\ttb.PRO_KEY, \t\t\tCAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t\t\t'DSI' TARGET_TYPE, \t\t\tCAST(ta.VALUE:target_dsi AS NUMBER(38, \t\t\t8)) TARGET, \t\t\tCAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t\t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t\t\tta.PARTITION_DATE PARTITION_DATE \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE ta \t\tJOIN DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PRD tb ON \t\t\tCAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR) \t\tWHERE \t\t\ttb.SOU_SYS_COD IN ('0', '6') \t\t\tAND tb.PRO_TYP != 'COMPETITOR' \t\t\tAND tb.SKU_ORI_DES != 'OLD PRODUCT' \t\t\tAND ta.PARTITION_DATE = ( \t\t\tSELECT \t\t\t\tCAST(MAX(PARTITION_DATE) AS VARCHAR) \t\t\tFROM \t\t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE) \tUNION ALL \t\tSELECT \t\t\ttb.PRO_KEY, \t\t\tCAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t\t\t'RETURN' TARGET_TYPE, \t\t\tCAST(ta.VALUE:target_return AS NUMBER(38, \t\t\t8)) TARGET, \t\t\tCAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t\t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t\t\tta.PARTITION_DATE PARTITION_DATE \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE ta \t\tJOIN DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PRD tb ON \t\t\tCAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR) \t\tWHERE \t\t\ttb.SOU_SYS_COD IN ('0', '6') \t\t\tAND tb.PRO_TYP != 'COMPETITOR' \t\t\tAND tb.SKU_ORI_DES != 'OLD PRODUCT' \t\t\tAND ta.PARTITION_DATE = ( \t\t\tSELECT \t\t\t\tCAST(MAX(PARTITION_DATE) AS VARCHAR) \t\t\tFROM \t\t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE) \tUNION ALL \t\tSELECT \t\t\ttb.PRO_KEY, \t\t\tCAST(ta.VALUE:channel AS VARCHAR) CHANNEL, \t\t\t'SERVICE LEVEL' TARGET_TYPE, \t\t\tCAST(ta.VALUE:target_service_level AS NUMBER(38, \t\t\t8)) TARGET, \t\t\tCAST(ta.VALUE:process_date AS VARCHAR) PROCESS_DATE, \t\t\tCAST(ta.VALUE:process_datetime AS TIMESTAMP_NTZ) PROCESS_DATETIME, \t\t\tta.PARTITION_DATE PARTITION_DATE \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE ta \t\tJOIN DEV_IDN.IDN_DMT_SFE.R_BTZ_IVT_PRD tb ON \t\t\tCAST(ta.VALUE:skuori_code AS VARCHAR) = CAST(tb.SKU_ORI AS VARCHAR) \t\tWHERE \t\t\ttb.SOU_SYS_COD IN ('0', '6') \t\t\tAND tb.PRO_TYP != 'COMPETITOR' \t\t\tAND tb.SKU_ORI_DES != 'OLD PRODUCT' \t\t\tAND ta.PARTITION_DATE = ( \t\t\tSELECT \t\t\t\tCAST(MAX(PARTITION_DATE) AS VARCHAR) \t\t\tFROM \t\t\t\tIDN_STG_TSM.S_MKA_MAPPING_SKU_CORE) ) SUB_A ) SOURCE ON \tdest.PRO_KEY = source.PRO_KEY \tAND dest.CHA = source.CHA \tAND dest.TAR_TYP = source.TAR_TYP \tWHEN MATCHED THEN UPDATE SET \tdest.PRO_KEY = source.PRO_KEY, \tdest.CHA = source.CHA, \tdest.TAR_TYP = source.TAR_TYP, \tdest.TAR = source.TAR, \tdest.CRE_TIM = source.CRE_TIM, \tdest.UPD_TIM = source.UPD_TIM, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.PRO_KEY, \tdest.CHA, \tdest.TAR_TYP, \tdest.TAR, \tdest.CRE_TIM, \tdest.UPD_TIM, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT) VALUES( source.PRO_KEY, source.CHA, source.TAR_TYP, source.TAR, source.CRE_TIM, source.UPD_TIM, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT );"
+			},
+			"DIM_RETAILER_DC_SELLPO": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_SND_RDS dest \t\tUSING ( \tSELECT \t\tb.CUS_DIS_KEY CUS_DIS_KEY, \t\ta.value:dc_b2b_code::VARCHAR DIS_RET_DCC_COD, \t\ta.value:dc_b2b::VARCHAR DIS_RET_DCN_NAM, \t\ta.value:distributor_id::VARCHAR DIS_DIS, \t\ta.value:DIS_NAM::VARCHAR DIS_NAM, \t\tc.ARE_KEY ARE_KEY, \t\ta.value:sellpo_code::VARCHAR DIS_SEL_ORI_COD, \t\ta.value:selling_point::VARCHAR DIS_SEL, \t\ta.value:dc_code::VARCHAR DIS_DCC_COD, \t\ta.value:dc_name::VARCHAR DIS_DCN_NAM, \t\tb.SOU_SYS_COD SOU_SYS_COD, \t\tNULL UPL_DAT, \t\tNULL UPD_TIM, \t\tNULL CRE_TIM, \t\tCAST(a.VALUE:process_date AS VARCHAR) PRO_DAT, \t\tCAST(a.VALUE:process_datetime AS TIMESTAMP_NTZ) PRO_ATE, \t\ta.PARTITION_DATE PAR_DAT \tFROM \t\tIDN_STG_TSM.S_MKA_MAPPING_SELLPO_TO_DC a \tJOIN IDN_DMT_SFE.R_BTZ_SND_CDH b ON \t\tb.CUS_DIS_KEY = a.value:dc_b2b_code::VARCHAR \t\tAND b.PRO_DAT = ( \t\tSELECT \t\t\tMAX (PRO_DAT) \t\tFROM \t\t\tIDN_DMT_SFE.R_BTZ_SND_CDH) \t\tAND b.SOU_SYS_COD IN ('0', '6') \tJOIN IDN_DMT_SFE.R_BTZ_GEO_ARH c ON \t\tc.ORI_COD = a.value:sellpo_code::VARCHAR \t\tAND c.PRO_DAT = ( \t\tSELECT \t\t\tMAX (PRO_DAT) \t\tFROM \t\t\tIDN_DMT_SFE.R_BTZ_GEO_ARH) \t\tAND c.SOU_SYS_COD IN ('0', '6') \tWHERE \t\ta.value:validation::VARCHAR = 'ACTIVE' QUALIFY ROW_NUMBER() OVER (PARTITION BY CUS_DIS_KEY, \t\tDIS_RET_DCC_COD, \t\tDIS_SEL_ORI_COD, \t\tDIS_DCC_COD \tORDER BY \t\ta.PARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.CUS_DIS_KEY = source.CUS_DIS_KEY \tAND dest.DIS_RET_DCC_COD = source.DIS_RET_DCC_COD \tAND dest.DIS_SEL_ORI_COD = source.DIS_SEL_ORI_COD \tAND dest.DIS_DCC_COD = source.DIS_DCC_COD \tWHEN MATCHED THEN UPDATE SET \tdest.CUS_DIS_KEY = source.CUS_DIS_KEY, \tdest.DIS_RET_DCC_COD = source.DIS_RET_DCC_COD, \tdest.DIS_RET_DCN_NAM = source.DIS_RET_DCN_NAM, \tdest.DIS_DIS = source.DIS_DIS, \tdest.DIS_NAM = source.DIS_NAM, \tdest.ARE_KEY = source.ARE_KEY, \tdest.DIS_SEL_ORI_COD = source.DIS_SEL_ORI_COD, \tdest.DIS_SEL = source.DIS_SEL, \tdest.DIS_DCC_COD = source.DIS_DCC_COD, \tdest.DIS_DCN_NAM = source.DIS_DCN_NAM, \tdest.SOU_SYS_COD = source.SOU_SYS_COD, \tdest.UPL_DAT = source.UPL_DAT, \tdest.UPD_TIM = source.UPD_TIM, \tdest.CRE_TIM = source.CRE_TIM, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.CUS_DIS_KEY, \tdest.DIS_RET_DCC_COD, \tdest.DIS_RET_DCN_NAM, \tdest.DIS_DIS, \tdest.DIS_NAM, \tdest.ARE_KEY, \tdest.DIS_SEL_ORI_COD, \tdest.DIS_SEL, \tdest.DIS_DCC_COD, \tdest.DIS_DCN_NAM, \tdest.SOU_SYS_COD, \tdest.UPL_DAT, \tdest.UPD_TIM, \tdest.CRE_TIM, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT ) VALUES( source.CUS_DIS_KEY, source.DIS_RET_DCC_COD, source.DIS_RET_DCN_NAM, source.DIS_DIS, source.DIS_NAM, source.ARE_KEY, source.DIS_SEL_ORI_COD, source.DIS_SEL, source.DIS_DCC_COD, source.DIS_DCN_NAM, source.SOU_SYS_COD, source.UPL_DAT, source.UPD_TIM, source.CRE_TIM, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT );"
+			},
+			"FACT_RETAILER_MARKET_SHARE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.F_BTZ_SND_MKS dest \t\tUSING ( \tSELECT \tCONCAT(CAST(SUB_A.YEAR AS VARCHAR), SUB_A.MONTHNUM, '01') PER_KEY, \tSUB_A.BRAND BRA, \tSUB_A.CATEGORY CAT, \tSUB_A.STORE ACC, \tSUB_A.SHARE_THIS_YEAR MAR_SHA_PER, \tSUB_A.PROCESS_DATE PRO_DAT , \tSUB_A.PROCESS_DATETIME PRO_ATE FROM \t( \tSELECT \t\t*, \t\tCASE \t\t\tWHEN MONTH = 'January' THEN '01' \t\t\tWHEN MONTH = 'February' THEN '02' \t\t\tWHEN MONTH = 'March' THEN '03' \t\t\tWHEN MONTH = 'April' THEN '04' \t\t\tWHEN MONTH = 'May' THEN '05' \t\t\tWHEN MONTH = 'June' THEN '06' \t\t\tWHEN MONTH = 'July' THEN '07' \t\t\tWHEN MONTH = 'August' THEN '08' \t\t\tWHEN MONTH = 'September' THEN '09' \t\t\tWHEN MONTH = 'October' THEN '10' \t\t\tWHEN MONTH = 'November' THEN '11' \t\t\tWHEN MONTH = 'December' THEN '12' \t\t\tELSE NULL \t\tEND MONTHNUM \tFROM \t\tIDN_STG_TSM.DEMO_MARKETSHARE_EXTRACT_BACKUP ) SUB_A QUALIFY ROW_NUMBER() OVER (PARTITION BY PER_KEY, \tBRA, \tCAT, \tACC ORDER BY \tPRO_ATE DESC) = 1 ) SOURCE ON \tdest.PER_KEY = source.PER_KEY \tAND dest.BRA = source.BRA \tAND dest.CAT = source.CAT \tAND dest.ACC = source.ACC \tWHEN MATCHED THEN UPDATE SET \tdest.PER_KEY = source.PER_KEY, \tdest.BRA = source.BRA, \tdest.CAT = source.CAT, \tdest.ACC = source.ACC, \tdest.MAR_SHA_PER = source.MAR_SHA_PER, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE \tWHEN NOT MATCHED THEN INSERT \t( dest.PER_KEY, \tdest.BRA, \tdest.CAT, \tdest.ACC, \tdest.MAR_SHA_PER, \tdest.PRO_DAT, \tdest.PRO_ATE) VALUES(      source.PER_KEY, source.BRA, source.CAT, source.ACC, source.MAR_SHA_PER, source.PRO_DAT, source.PRO_ATE );"
+			},
+			"FACT_RETAILER_STORE_COUNT": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.F_BTZ_SND_SCO dest \t\tUSING ( \tSELECT \t\tDISTINCT SUB.PERIOD_KEY PER_KEY, \t\tSUB.CUS_DIS_KEY CUS_DIS_KEY, \t\tSUB.TOTAL_STORES TOT_STO, \t\tTO_VARCHAR(CURRENT_TIMESTAMP,'YYYYMMDD') PRO_DAT, \t\tCURRENT_TIMESTAMP CRE_TIM, \t\tCURRENT_TIMESTAMP UPD_TIM, \t\tSUB.PROCESS_DATETIME PRO_ATE, \t\tSUB.PARTITION_DATE PAR_DAT \tFROM \t\t( \t\tSELECT \t\t\tCONCAT(SUBSTR(sd.VALUE:process_date::VARCHAR, 1, 6), '01')::INTEGER AS PERIOD_KEY, \t\t\tcd.CUS_DIS_KEY, \t\t\tsd.VALUE:no_of_stores::INTEGER AS TOTAL_STORES, \t\t\tsd.VALUE:process_datetime PROCESS_DATETIME, \t\t\tsd.PARTITION_DATE PARTITION_DATE \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_MAPPING_SELLPO_TO_DC AS sd \t\tLEFT JOIN ( \t\t\tSELECT \t\t\t\tCUS_DIS_KEY, \t\t\t\tCUS_DIS_COD \t\t\tFROM \t\t\t\tDEV_IDN.IDN_DMT_SFE.R_BTZ_SND_CSD \t\t\tWHERE \t\t\t\tSUB_CHA_DES = 'MMKA' \t\t\t\tAND SOU_SYS_COD = 6 ) AS cd ON \t\t\tsd.VALUE:dc_b2b_code::VARCHAR = cd.CUS_DIS_COD \t\tWHERE \t\t\tLOWER(sd.VALUE:dc_b2b_code::VARCHAR) <> 'nan' ) SUB QUALIFY ROW_NUMBER() OVER (PARTITION BY SUB.PERIOD_KEY, \t\tSUB.CUS_DIS_KEY, \t\tSUB.TOTAL_STORES \tORDER BY \t\tSUB.PROCESS_DATETIME DESC) = 1 ) SOURCE ON \tdest.PER_KEY = source.PER_KEY \tAND dest.CUS_DIS_KEY = source.CUS_DIS_KEY \tWHEN MATCHED THEN UPDATE SET \tdest.PER_KEY = source.PER_KEY, \tdest.CUS_DIS_KEY = source.CUS_DIS_KEY, \tdest.TOT_STO = source.TOT_STO, \tdest.PRO_DAT = source.PRO_DAT, \tdest.CRE_TIM = source.CRE_TIM, \tdest.UPD_TIM = source.UPD_TIM, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.PER_KEY, \tdest.CUS_DIS_KEY, \tdest.TOT_STO, \tdest.PRO_DAT, \tdest.CRE_TIM, \tdest.UPD_TIM, \tdest.PRO_ATE, \tdest.PAR_DAT) VALUES( source.PER_KEY, source.CUS_DIS_KEY, source.TOT_STO, source.PRO_DAT, source.CRE_TIM, source.UPD_TIM, source.PRO_ATE, source.PAR_DAT );"
+			},
+			"DIM_BRAND": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_MLK_BRD dest \t\tUSING ( \tSELECT \t\tCASE WHEN (VALUE:Brand_Code::VARCHAR)= 'N/A' THEN 0 ELSE VALUE:Brand_Code::VARCHAR END AS BRA_COD, \t\tVALUE:Brand_Key::NUMBER(38,0) AS BRA_KEY, \t\tVALUE:Source_System_Code::NUMBER(38,0) AS SOU_SYS_COD, \t\tVALUE:process_date::NUMBER(38,0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_NTZ AS PRO_ATE, \t\tPARTITION_DATE AS PAR_DAT, \t\tVALUE:Brand_Desc::VARCHAR AS BRA_DES, \t\tVALUE:Create_Timestamp::VARCHAR AS CRE_TIM, \t\tVALUE:Update_Timestamp::VARCHAR AS UPD_TIM \tFROM \t\tIDN_STG_TSM.S_BTZ_DIM_BRAND  \tWHERE partition_date = ( \t\tSELECT \t\t\tmax(partition_date) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_DIM_BRAND ) \t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY BRA_COD \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.BRA_COD = source.BRA_COD \tWHEN MATCHED THEN UPDATE SET \tdest.BRA_COD = source.BRA_COD, \tdest.BRA_KEY = source.BRA_KEY, \tdest.SOU_SYS_COD = source.SOU_SYS_COD, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.BRA_DES = source.BRA_DES, \tdest.CRE_TIM = source.CRE_TIM, \tdest.UPD_TIM = source.UPD_TIM \tWHEN NOT MATCHED THEN INSERT \t( dest.BRA_COD, \tdest.BRA_KEY, \tdest.SOU_SYS_COD, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.BRA_DES, \tdest.CRE_TIM, \tdest.UPD_TIM) VALUES( source.BRA_COD, source.BRA_KEY, source.SOU_SYS_COD, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.BRA_DES, source.CRE_TIM, source.UPD_TIM);"
+			},
+			"DIM_PRODUCT_MS": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_MLK_PMS dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_NTZ AS PRO_ATE, \t\tVALUE:product_code::NUMBER(38, \t\t0) AS PRO_COD, \t\tVALUE:product_key::NUMBER(38, \t\t0) AS PRO_KEY, \t\tVALUE:skuori::NUMBER(38, \t\t0) AS SKU, \t\tPARTITION_DATE AS PAR_DAT, \t\tVALUE:branddesc::VARCHAR AS BRA, \t\tVALUE:groupdesc::VARCHAR AS GRO, \t\tVALUE:packagedesc::VARCHAR AS PAC, \t\tVALUE:product_name::VARCHAR AS PRO_NAM, \t\tVALUE:sizedesc::VARCHAR AS SIZ, \t\tVALUE:stage_ms::VARCHAR AS STA_MSX, \t\tVALUE:stagedesc::VARCHAR AS STA, \t\tVALUE:subbranddesc::VARCHAR AS SUB, \t\tVALUE:variantdesc::VARCHAR AS VAR \tFROM \t\tIDN_STG_TSM.S_BTZ_DIM_PRODUCT_MS \tWHERE partition_date = ( \t\tSELECT \t\t\tmax(partition_date) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_DIM_PRODUCT_MS )\t \t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY pro_key \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.PRO_KEY = source.PRO_KEY \tWHEN MATCHED THEN UPDATE SET \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PRO_COD = source.PRO_COD, \tdest.PRO_KEY = source.PRO_KEY, \tdest.SKU = source.SKU, \tdest.PAR_DAT = source.PAR_DAT, \tdest.BRA = source.BRA, \tdest.GRO = source.GRO, \tdest.PAC = source.PAC, \tdest.PRO_NAM = source.PRO_NAM, \tdest.SIZ = source.SIZ, \tdest.STA_MSX = source.STA_MSX, \tdest.STA = source.STA, \tdest.SUB = source.SUB, \tdest.VAR = source.VAR \tWHEN NOT MATCHED THEN INSERT \t( dest.PRO_DAT, \tdest.PRO_ATE, \tdest.PRO_COD, \tdest.PRO_KEY, \tdest.SKU, \tdest.PAR_DAT, \tdest.BRA, \tdest.GRO, \tdest.PAC, \tdest.PRO_NAM, \tdest.SIZ, \tdest.STA_MSX, \tdest.STA, \tdest.SUB, \tdest.VAR) VALUES( source.PRO_DAT, source.PRO_ATE, source.PRO_COD, source.PRO_KEY, source.SKU, source.PAR_DAT, source.BRA, source.GRO, source.PAC, source.PRO_NAM, source.SIZ, source.STA_MSX, source.STA, source.SUB, source.VAR);"
+			},
+			"DIM_TYPE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_OTH_TYP dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:Type_Key::NUMBER(38, \t\t0) AS TYP_KEY, \t\tVALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_TZ AS PRO_ATE, \t\tPARTITION_DATE AS PAR_DAT, \t\tVALUE:Type_Desc::VARCHAR AS TYP_DES \tFROM \tWHERE partition_date = ( \t\tSELECT \t\t\tmax(partition_date) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_DIM_TYPE ) \t\tIDN_STG_TSM.S_BTZ_DIM_TYPE QUALIFY ROW_NUMBER() OVER (PARTITION BY Typ_Key \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.TYP_KEY = source.TYP_KEY \tWHEN MATCHED THEN UPDATE SET \tdest.TYP_KEY = source.TYP_KEY, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.TYP_DES = source.TYP_DES \tWHEN NOT MATCHED THEN INSERT \t( dest.TYP_KEY, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.TYP_DES) VALUES( source.TYP_KEY, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.TYP_DES);"
+			},
+			"DIM_DISTRIBUTOR_HIST": {
+				"type": "String",
+				"defaultValue": "INSERT \tINTO \tIDN_DMT_SFE.R_BTZ_SND_DBH  SELECT \tVALUE:Distributor_Key::NUMBER DIS_KEY, \tVALUE:Distributor_Id::VARCHAR DIS_DIS, \tVALUE:Distributor_Name::VARCHAR DIS_NAM, \tVALUE:Warehouse_Id::VARCHAR WAR_WAR, \tVALUE:Warehouse_Name::VARCHAR WAR_NAM, \tVALUE:Distributor_Head::VARCHAR DIS_HEA, \tVALUE:Area_Head::VARCHAR ARE_HEA, \tVALUE:Region_Source::VARCHAR REG_SOU, \tVALUE:Group_Name::VARCHAR GRO_NAM, \tVALUE:Distributor_Area_Id::VARCHAR DIS_ARE_ARE, \tVALUE:Distributor_Area_Name::VARCHAR DIS_ARE_NAM, \tVALUE:Source_System_Code::VARCHAR SOU_SYS_COD, \tVALUE:Upload_Date::TIMESTAMP_NTZ UPL_DAT, \tVALUE:process_date::VARCHAR PRO_DAT, \tVALUE:Create_Timestamp::TIMESTAMP_NTZ CRE_TIM, \tVALUE:Update_Timestamp::TIMESTAMP_NTZ UPD_TIM, \tVALUE:process_datetime::TIMESTAMP_NTZ PRO_ATE, \tPARTITION_DATE AS  Par_dat FROM \tIDN_STG_TSM.S_BTZ_DIM_DISTRIBUTOR WHERE \tPARTITION_DATE = ( \tSELECT \t\tMAX(PARTITION_DATE) \tFROM \t\tIDN_STG_TSM.S_BTZ_DIM_DISTRIBUTOR);"
+			},
+			"F_BTZ_SND_MKS": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.F_BTZ_SND_MKS dest \t\tUSING ( \tSELECT \t\tDISTINCT CONCAT(REPLACE(GET(SPLIT(GET(SPLIT(REPLACE(VALUE:filename::VARCHAR, ' - ', '|'), '|'), 1)::VARCHAR, '.'), 0)::VARCHAR, '-', ''), '01') PER_KEY , \t\tVALUE:brand::VARCHAR BRA, \t\tVALUE:category::VARCHAR CAT, \t\tVALUE:store::VARCHAR ACC, \t\t(VALUE:share_this_year::NUMBER(38,20)/ 100)::NUMBER(38,20) MAR_SHA_PER, \t\t0 ISM_MON, \t\tVALUE:process_date::VARCHAR PRO_ATE, \t\tMAX(VALUE:process_datetime::TIMESTAMP_TZ) PRO_DAT \tFROM \t\tIDN_STG_TSM.S_MKA_ALFAMART \tWHERE \t\tPARTITION_DATE::NUMBER(38,0) = (SELECT MAX(PARTITION_DATE::NUMBER(38, 0))FROM IDN_STG_TSM.S_MKA_ALFAMART) \t\tAND LOWER(VALUE:share_this_year::VARCHAR) != 'nan' \tGROUP BY \t\t1, \t\t2, \t\t3, \t\t4, \t\t5, \t\t6, \t\t7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PER_KEY, \t\tBRA, \t\tCAT, \t\tACC, \t\tISM_MON \tORDER BY \t\tPRO_DAT DESC) = 1 UNION \tSELECT \t\tDISTINCT CONCAT(REPLACE(GET(SPLIT(GET(SPLIT(REPLACE(VALUE:filename::VARCHAR, ' - ', '|'), '|'), 1)::VARCHAR, '.'), 0)::VARCHAR, '-', ''), '01') PER_KEY, \t\tVALUE:brand::VARCHAR BRA, \t\tVALUE:category::VARCHAR CAT, \t\tVALUE:store::VARCHAR ACC, \t\t(VALUE:share_this_year::NUMBER(38, \t\t20)/ 100)::NUMBER(38, \t\t20) MAR_SHA_PER, \t\t0 ISM_MON, \t\tVALUE:process_date::VARCHAR PRO_ATE, \t\tMAX(VALUE:process_datetime::TIMESTAMP_TZ) PRO_DAT \tFROM \t\tIDN_STG_TSM.S_MKA_ALFAMIDI  \tWHERE \t\tPARTITION_DATE::NUMBER(38, \t\t0) = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE::NUMBER(38, 0)) \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_ALFAMIDI ) \t\tAND LOWER(VALUE:share_this_year::VARCHAR) != 'nan' \tGROUP BY \t\t1, \t\t2, \t\t3, \t\t4, \t\t5, \t\t6, \t\t7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PER_KEY, \t\tBRA, \t\tCAT, \t\tACC, \t\tISM_MON \tORDER BY \t\tPRO_DAT DESC) = 1 UNION \tSELECT \t\tDISTINCT CONCAT(REPLACE(GET(SPLIT(GET(SPLIT(REPLACE(RIY.VALUE:filename::VARCHAR, ' - ', '|'), '|'), 1)::VARCHAR, '.'), 0)::VARCHAR, '-', ''), '01') PER_KEY, \t\tRIY.VALUE:brand::VARCHAR BRA, \t\tRIY.VALUE:category::VARCHAR CAT, \t\tRIY.VALUE:store::VARCHAR ACC, \t\t(RIY.VALUE:current_year_shares::NUMBER(38, \t\t20)/ 100)::NUMBER(38, \t\t20) MAR_SHA_PER, \t\t0 ISM_MON, \t\tRIY.VALUE:process_date::VARCHAR PRO_ATE, \t\tMAX(RIY.VALUE:process_datetime::TIMESTAMP_TZ) PRO_DAT \tFROM \t\tIDN_STG_TSM.S_MKA_INDOMARET_YEARLY RIY \tINNER JOIN ( \t\tSELECT \t\t\tVALUE:filename::VARCHAR FILENAME, \t\t\tCONCAT(VALUE:value_year::VARCHAR, (CASE WHEN VALUE:value_month::INTEGER < 10 THEN CONCAT('0', VALUE:value_month::VARCHAR) ELSE VALUE:value_month::VARCHAR END), '01') PERIOD_KEY_REF, \t\t\tSUM(VALUE:market_shared::NUMBER(38, 8)) SUM_SHARE \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_INDOMARET_MONTHLY  \t\tWHERE \t\t\tPARTITION_DATE::NUMBER(38, \t\t\t0) = ( \t\t\tSELECT \t\t\t\tMAX(PARTITION_DATE::NUMBER(38, 0)) \t\t\tFROM \t\t\t\tIDN_STG_TSM.S_MKA_INDOMARET_MONTHLY ) \t\tGROUP BY \t\t\t1, \t\t\t2 \t\tHAVING \t\t\tSUM_SHARE > 0 ) SRIM ON \t\tRIY.VALUE:filename::VARCHAR = SRIM.FILENAME \tWHERE \t\tRIY.PARTITION_DATE::NUMBER(38, \t\t0) = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE::NUMBER(38, 0)) \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_INDOMARET_YEARLY) \t\tAND LOWER(RIY.VALUE:current_year_shares::VARCHAR) != 'nan' \tGROUP BY \t\t1, \t\t2, \t\t3, \t\t4, \t\t5, \t\t6, \t\t7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PER_KEY, \t\tBRA, \t\tCAT, \t\tACC, \t\tISM_MON \tORDER BY \t\tPRO_DAT DESC) = 1 UNION \tSELECT \t\tDISTINCT CONCAT(RIM.VALUE:value_year::VARCHAR, (CASE WHEN RIM.VALUE:value_month::INTEGER < 10 THEN CONCAT('0', RIM.VALUE:value_month::VARCHAR) ELSE RIM.VALUE:value_month::VARCHAR END), '01') PER_KEY, \t\tRIM.VALUE:brand::VARCHAR BRA, \t\tRIM.VALUE:category::VARCHAR CAT, \t\tRIM.VALUE:store::VARCHAR ACC, \t\t(RIM.VALUE:market_shared::NUMBER(38, \t\t20)/ 100)::NUMBER(38, \t\t20) MAR_SHA_PER, \t\t1 ISM_MON, \t\tRIM.VALUE:process_date::VARCHAR PRO_ATE, \t\tMAX(RIM.VALUE:process_datetime::TIMESTAMP_TZ) PRO_DAT \tFROM \t\tIDN_STG_TSM.S_MKA_INDOMARET_MONTHLY RIM \tINNER JOIN ( \t\tSELECT \t\t\tVALUE:filename::VARCHAR FILENAME, \t\t\tCONCAT(VALUE:value_year::VARCHAR, (CASE WHEN VALUE:value_month::INTEGER < 10 THEN CONCAT('0', VALUE:value_month::VARCHAR) ELSE VALUE:value_month::VARCHAR END), '01') PERIOD_KEY_REF, \t\t\tSUM(VALUE:market_shared::NUMBER(38, 20)) SUM_SHARE \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_INDOMARET_MONTHLY \t\tWHERE \t\t\tPARTITION_DATE::NUMBER(38, \t\t\t0) = ( \t\t\tSELECT \t\t\t\tMAX(PARTITION_DATE::NUMBER(38, 0)) \t\t\tFROM \t\t\t\tIDN_STG_TSM.S_MKA_INDOMARET_MONTHLY) \t\tGROUP BY \t\t\t1, \t\t\t2 \t\tHAVING \t\t\tSUM_SHARE > 0 ) SRIM ON \t\tRIM.VALUE:filename::VARCHAR = SRIM.FILENAME \t\tAND CONCAT(RIM.VALUE:value_year::VARCHAR, (CASE WHEN RIM.VALUE:value_month::INTEGER < 10 THEN CONCAT('0', RIM.VALUE:value_month::VARCHAR) ELSE RIM.VALUE:value_month::VARCHAR END), '01') = SRIM.PERIOD_KEY_REF \tWHERE \t\tRIM.PARTITION_DATE::NUMBER(38, \t\t0) = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE::NUMBER(38, 0)) \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_INDOMARET_MONTHLY) \t\tAND LOWER(RIM.VALUE:market_shared::VARCHAR) != 'nan' \tGROUP BY \t\t1, \t\t2, \t\t3, \t\t4, \t\t5, \t\t6, \t\t7 QUALIFY ROW_NUMBER() OVER (PARTITION BY PER_KEY, \t\tBRA, \t\tCAT, \t\tACC, \t\tISM_MON \tORDER BY \t\tPRO_DAT DESC) = 1 ) SOURCE ON \tdest.PER_KEY = source.PER_KEY \tAND dest.BRA = source.BRA \tAND dest.CAT = source.CAT \tAND dest.ACC = source.ACC \tAND dest.ISM_MON = source.ISM_MON \tWHEN MATCHED THEN UPDATE SET \tdest.PER_KEY = source.PER_KEY, \tdest.BRA = source.BRA, \tdest.CAT = source.CAT, \tdest.ACC = source.ACC, \tdest.MAR_SHA_PER = source.MAR_SHA_PER, \tdest.ISM_MON = source.ISM_MON, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PRO_DAT = source.PRO_DAT, \tdest.UPD_TIM = CURRENT_TIMESTAMP::TIMESTAMP_TZ \tWHEN NOT MATCHED THEN INSERT \t( dest.PER_KEY, \tdest.BRA, \tdest.CAT, \tdest.ACC, \tdest.MAR_SHA_PER, \tdest.ISM_MON, \tdest.PRO_ATE, \tdest.PRO_DAT, \tdest.CRE_TIM , \tdest.UPD_TIM) VALUES( source.PER_KEY, source.BRA, source.CAT, source.ACC, source.MAR_SHA_PER, source.ISM_MON, source.PRO_ATE, source.PRO_DAT, CURRENT_TIMESTAMP::TIMESTAMP_TZ, CURRENT_TIMESTAMP::TIMESTAMP_TZ );"
+			},
+			"R_BTZ_SND_RDS": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_SND_RDS dest \t\tUSING ( \tSELECT \t\tb.CUS_DIS_KEY, \t\ta.value:dc_b2b_code::VARCHAR DIS_RET_DCC_COD, \t\ta.value:dc_b2b::VARCHAR DIS_RET_DCN_NAM, \t\ta.value:distributor_id::VARCHAR DIS_DIS, \t\ta.value:distributor_name::VARCHAR DIS_NAM, \t\tc.ARE_KEY, \t\ta.value:sellpo_code::VARCHAR DIS_SEL_ORI_COD, \t\ta.value:selling_point::VARCHAR DIS_SEL, \t\ta.value:dc_code::VARCHAR DIS_DCC_COD, \t\ta.value:dc_name::VARCHAR DIS_DCN_NAM, \t\tb.SOU_SYS_COD, \t\tNULL UPL_DAT, \t\tNULL PRO_DAT, \t\tNULL CRE_TIM, \t\tCAST(a.VALUE:process_date AS VARCHAR) UPD_TIM, \t\tCAST(a.VALUE:process_datetime AS TIMESTAMP_NTZ) PRO_ATE, \t\ta.PARTITION_date AS PAR_DAT  \tFROM \t\tIDN_STG_TSM.S_MNL_MAPPING_SELLPO_TO_DC a \tJOIN IDN_DMT_SFE.R_BTZ_SND_CDH b ON \t\tb.CUS_DIS_COD = a.value:dc_b2b_code::VARCHAR \t\tAND b.PRO_ATE = ( \t\tSELECT \t\t\tMAX (PRO_ATE) \t\tFROM \t\t\tIDN_DMT_SFE.R_BTZ_SND_CDH) \t\tAND b.SOU_SYS_COD IN ('0', '6') \tJOIN IDN_DMT_SFE.R_BTZ_GEO_ARH c ON \t\tc.ORI_COD = a.value:sellpo_code::VARCHAR \t\tAND c.PRO_ATE = ( \t\tSELECT \t\t\tMAX (PRO_ATE) \t\tFROM \t\t\tIDN_DMT_SFE.R_BTZ_GEO_ARH) \t\tAND c.SOU_SYS_COD IN ('0', '6') \tWHERE \t\ta.value:validation::VARCHAR = 'ACTIVE' \t\tAND a.PARTITION_date = ( \t\tSELECT \t\t\tMAX(PARTITION_date) \t\tFROM \t\t\tIDN_STG_TSM.S_MNL_MAPPING_SELLPO_TO_DC) QUALIFY ROW_NUMBER() OVER (PARTITION BY CUS_DIS_KEY, \t\tDIS_RET_DCC_COD, \t\tDIS_RET_DCN_NAM, \t\tDIS_DIS \tORDER BY \t\ta.PARTITION_date DESC) = 1 ) SOURCE ON \tdest.CUS_DIS_KEY = source.CUS_DIS_KEY \tAND dest.DIS_RET_DCC_COD = source.DIS_RET_DCC_COD \tAND dest.DIS_RET_DCN_NAM = source.DIS_RET_DCN_NAM \tAND dest.DIS_DIS = source.DIS_DIS \tWHEN MATCHED THEN UPDATE SET \tdest.CUS_DIS_KEY = source.CUS_DIS_KEY, \tdest.DIS_RET_DCC_COD = source.DIS_RET_DCC_COD, \tdest.DIS_RET_DCN_NAM = source.DIS_RET_DCN_NAM, \tdest.DIS_DIS = source.DIS_DIS, \tdest.DIS_NAM = source.DIS_NAM, \tdest.ARE_KEY = source.ARE_KEY, \tdest.DIS_SEL_ORI_COD = source.DIS_SEL_ORI_COD, \tdest.DIS_SEL = source.DIS_SEL, \tdest.DIS_DCC_COD = source.DIS_DCC_COD, \tdest.DIS_DCN_NAM = source.DIS_DCN_NAM, \tdest.SOU_SYS_COD = source.SOU_SYS_COD, \tdest.UPL_DAT = source.UPL_DAT, \tdest.PRO_DAT = source.PRO_DAT, \tdest.CRE_TIM = source.CRE_TIM, \tdest.UPD_TIM = source.UPD_TIM, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.CUS_DIS_KEY, \tdest.DIS_RET_DCC_COD, \tdest.DIS_RET_DCN_NAM, \tdest.DIS_DIS, \tdest.DIS_NAM, \tdest.ARE_KEY, \tdest.DIS_SEL_ORI_COD, \tdest.DIS_SEL, \tdest.DIS_DCC_COD, \tdest.DIS_DCN_NAM, \tdest.SOU_SYS_COD, \tdest.UPL_DAT, \tdest.PRO_DAT, \tdest.CRE_TIM, \tdest.UPD_TIM, \tdest.PRO_ATE, \tdest.PAR_DAT ) VALUES( source.CUS_DIS_KEY, source.DIS_RET_DCC_COD, source.DIS_RET_DCN_NAM, source.DIS_DIS, source.DIS_NAM, source.ARE_KEY, source.DIS_SEL_ORI_COD, source.DIS_SEL, source.DIS_DCC_COD, source.DIS_DCN_NAM, source.SOU_SYS_COD, source.UPL_DAT, source.PRO_DAT, source.CRE_TIM, source.UPD_TIM, source.PRO_ATE, source.PAR_DAT);"
+			},
+			"R_BTZ_DIS_PUT": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_DIS_PUT dest \t\tUSING ( \tSELECT  \t   VALUE:Distributor_Id::VARCHAR DIS_ID0,         VALUE:Distributor_Key::NUMBER(38,0) DIS,         VALUE:GroupPurchaseTypeCd::VARCHAR GRO_PUR_TYPE_IDX,         VALUE:GroupPurchaseTypeDesc::VARCHAR GRO_PUR_TYP_DES,         VALUE:PurchaseTypeOriCd::VARCHAR PUR_TYP_ORI_CDX,        VALUE:PurchaseTypeOriDesc::VARCHAR PUR_TYP_ORI_DES,         VALUE:Purchase_Type_Key::number(38,0) PUR_TYP_KEY,        VALUE:Source_System_Code::number(38,0) SOU_SYS_COD,        VALUE:Create_Timestamp::TIMESTAMP_TZ CRE_TIM,        VALUE:Update_Timestamp::TIMESTAMP_TZ UPD_TIM,        VALUE:UploadTime::VARCHAR LOA,        VALUE:process_date::VARCHAR PRO_ATE,         VALUE:process_datetime::TIMESTAMP_TZ PRO_DAT,        PARTITION_DATE AS PAR_DAT FROM DEV_IDN.IDN_STG_TSM.S_BTZ_DIM_PURCHASE_TYPE WHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tDEV_IDN.IDN_STG_TSM.S_BTZ_DIM_PURCHASE_TYPE )  QUALIFY ROW_NUMBER() OVER (PARTITION BY DIS_ID0, DIS, GRO_PUR_TYPE_IDX, GRO_PUR_TYP_DES, PUR_TYP_ORI_CDX, PUR_TYP_ORI_DES, PUR_TYP_KEY, SOU_SYS_COD ORDER BY PRO_DAT DESC) = 1) SOURCE ON \tdest.DIS_ID0 = source.DIS_ID0 \tAND dest.DIS = source.DIS \tAND dest.GRO_PUR_TYPE_IDX = source.GRO_PUR_TYPE_IDX     AND dest.GRO_PUR_TYP_DES = source.GRO_PUR_TYP_DES \tAND dest.PUR_TYP_ORI_CDX = source.PUR_TYP_ORI_CDX \tAND dest.PUR_TYP_ORI_DES = source.PUR_TYP_ORI_DES \tAND dest.PUR_TYP_KEY = source.PUR_TYP_KEY \tAND dest.SOU_SYS_COD = source.SOU_SYS_COD \tWHEN MATCHED THEN UPDATE SET dest.DIS_ID0 = source.DIS_ID0, dest.DIS = source.DIS, dest.GRO_PUR_TYPE_IDX = source.GRO_PUR_TYPE_IDX, dest.GRO_PUR_TYP_DES = source.GRO_PUR_TYP_DES, dest.PUR_TYP_ORI_CDX = source.PUR_TYP_ORI_CDX, dest.PUR_TYP_ORI_DES = source.PUR_TYP_ORI_DES, dest.PUR_TYP_KEY = source.PUR_TYP_KEY, dest.SOU_SYS_COD = source.SOU_SYS_COD, dest.CRE_TIM = source.CRE_TIM, dest.UPD_TIM = source.UPD_TIM, dest.LOA = source.LOA, dest.PRO_ATE = source.PRO_ATE, dest.PRO_DAT = source.PRO_DAT, dest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t(  dest.DIS_ID0, dest.DIS, dest.GRO_PUR_TYPE_IDX, dest.GRO_PUR_TYP_DES, dest.PUR_TYP_ORI_CDX, dest.PUR_TYP_ORI_DES, dest.PUR_TYP_KEY, dest.SOU_SYS_COD, dest.CRE_TIM, dest.UPD_TIM, dest.LOA, dest.PRO_ATE, dest.PRO_DAT, dest.PAR_DAT ) VALUES(  source.DIS_ID0, source.DIS, source.GRO_PUR_TYPE_IDX, source.GRO_PUR_TYP_DES, source.PUR_TYP_ORI_CDX, source.PUR_TYP_ORI_DES, source.PUR_TYP_KEY, source.SOU_SYS_COD, source.CRE_TIM, source.UPD_TIM, source.LOA, source.PRO_ATE, source.PRO_DAT, source.PAR_DAT);"
+			}
+		},
+		"annotations": [
+			"SFE",
+			"CORE"
+		],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

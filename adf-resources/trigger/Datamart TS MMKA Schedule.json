@@ -1,0 +1,29 @@
+{
+	"name": "Datamart TS MMKA Schedule",
+	"properties": {
+		"description": "This trigger is to set schedule run to load MMKA TS data from staging to dev_idn dmt. The data source is from B2B taken by RPA and NKA Extractor loaded to staging. ",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Datamart_TS_MMKA",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"schema": "IDN_DMT_SFE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-04T06:05:00",
+				"timeZone": "SE Asia Standard Time"
+			}
+		}
+	}
+}

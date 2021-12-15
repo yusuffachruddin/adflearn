@@ -1,0 +1,368 @@
+{
+	"name": "pl_process_DimandFact",
+	"properties": {
+		"activities": [
+			{
+				"name": "process_dimension",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SMART_BLITZ/REFERENCE/nb_dimensions_smartblitz",
+					"baseParameters": {
+						"dateTimestamp": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "IDN_SFE_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "process_fact",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "process_dimension",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SMART_BLITZ/TRANSACTION/nb_process_fact_smartblitz",
+					"baseParameters": {
+						"dateTimestamp": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "IDN_SFE_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "curated_fact",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "process_fact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SMART_BLITZ/TRANSACTION/nb_curation_fact_smartblitz",
+					"baseParameters": {
+						"dateDay": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'dd')",
+							"type": "Expression"
+						},
+						"dateMonth": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'MM')",
+							"type": "Expression"
+						},
+						"dateYear": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy')",
+							"type": "Expression"
+						},
+						"dateTimestamp": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "IDN_SFE_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "merge",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "curated_fact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "curated_fact_osa",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_copy_staging_to_core",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "curated_fact_osa",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "process_fact",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SMART_BLITZ/TRANSACTION/nb_process_osafact_smartblitz",
+					"baseParameters": {
+						"dateDay": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'dd')",
+							"type": "Expression"
+						},
+						"dateMonth": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'MM')",
+							"type": "Expression"
+						},
+						"dateYear": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy')",
+							"type": "Expression"
+						},
+						"dateTimestamp": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "IDN_SFE_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Dimension - Send Failure Notification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "process_dimension",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://prod-30.southeastasia.logic.azure.com:443/workflows/916fd2bd2fcd457b876ee50f039cfe78/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_DcwLIctRLQteCGeOCSv-LpSiwTlWuhYzcGJ8i_xMYw",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"content-type": "application/json"
+					},
+					"body": {
+						"value": "{\"DataFactoryName\":\"@{pipeline().DataFactory}\",\"PipelineName\":\"@{pipeline().Pipeline}\",\"Subject\":\"Ingestion Failed!\",\"ErrorMessage\":\"The ADF pipeline has crashed! Please check the logs.\",\"EmailTo\":\"wiby.ryanda@external.danone.com; giovanni.guliano@external.danone.com\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Processing - Send Failure Notification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "process_fact",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://prod-30.southeastasia.logic.azure.com:443/workflows/916fd2bd2fcd457b876ee50f039cfe78/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_DcwLIctRLQteCGeOCSv-LpSiwTlWuhYzcGJ8i_xMYw",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"content-type": "application/json"
+					},
+					"body": {
+						"value": "{\"DataFactoryName\":\"@{pipeline().DataFactory}\",\"PipelineName\":\"@{pipeline().Pipeline}\",\"Subject\":\"Ingestion Failed!\",\"ErrorMessage\":\"The ADF pipeline has crashed! Please check the logs.\",\"EmailTo\":\"wiby.ryanda@external.danone.com; giovanni.guliano@external.danone.com\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Analytic 1 - Send Failure Notification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "curated_fact",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://prod-30.southeastasia.logic.azure.com:443/workflows/916fd2bd2fcd457b876ee50f039cfe78/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_DcwLIctRLQteCGeOCSv-LpSiwTlWuhYzcGJ8i_xMYw",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"content-type": "application/json"
+					},
+					"body": {
+						"value": "{\"DataFactoryName\":\"@{pipeline().DataFactory}\",\"PipelineName\":\"@{pipeline().Pipeline}\",\"Subject\":\"Ingestion Failed!\",\"ErrorMessage\":\"The ADF pipeline has crashed! Please check the logs.\",\"EmailTo\":\"wiby.ryanda@external.danone.com; giovanni.guliano@external.danone.com\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Analytic 2 - Send Failure Notification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "curated_fact_osa",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://prod-30.southeastasia.logic.azure.com:443/workflows/916fd2bd2fcd457b876ee50f039cfe78/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_DcwLIctRLQteCGeOCSv-LpSiwTlWuhYzcGJ8i_xMYw",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"content-type": "application/json"
+					},
+					"body": {
+						"value": "{\"DataFactoryName\":\"@{pipeline().DataFactory}\",\"PipelineName\":\"@{pipeline().Pipeline}\",\"Subject\":\"Ingestion Failed!\",\"ErrorMessage\":\"The ADF pipeline has crashed! Please check the logs.\",\"EmailTo\":\"wiby.ryanda@external.danone.com; giovanni.guliano@external.danone.com\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "merging staging to core - Send Failure Notification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "merge",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://prod-30.southeastasia.logic.azure.com:443/workflows/916fd2bd2fcd457b876ee50f039cfe78/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_DcwLIctRLQteCGeOCSv-LpSiwTlWuhYzcGJ8i_xMYw",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"content-type": "application/json"
+					},
+					"body": {
+						"value": "{\"DataFactoryName\":\"@{pipeline().DataFactory}\",\"PipelineName\":\"@{pipeline().Pipeline}\",\"Subject\":\"Ingestion Failed!\",\"ErrorMessage\":\"The ADF pipeline has crashed! Please check the logs.\",\"EmailTo\":\"wiby.ryanda@external.danone.com; giovanni.guliano@external.danone.com\"}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"jobName": {
+				"type": "string",
+				"defaultValue": "pl_process_DimandFact"
+			},
+			"DayofStart": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"folder": {
+			"name": "smart_blitz"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-14T06:19:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,40 @@
+{
+	"name": "MappingReferences_FullDailyCuration",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "InitialDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"container": "raw",
+					"database": "ts-mmka",
+					"use_case": "dss-sfe",
+					"table_list": "['dboMappingCustomerDistributor.csv', 'dboMappingProduct.csv', 'dboPrice.csv', 'dboUOMConversion.csv', 'dboMappingDistributorAreaType.csv']",
+					"full_dir": "/ts-mmka/mapping-references/full/",
+					"daily_dir": "/ts-mmka/mapping-references/daily/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-07-22T10:21:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						23
+					]
+				}
+			}
+		}
+	}
+}

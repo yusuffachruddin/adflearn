@@ -1,0 +1,35 @@
+{
+	"name": "ecommerce_klikidm_curation",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "SFE_Ecommerce_KlikIDM_Extractor",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"filename": "ECOMMERCE_KLIKIDM_SELLOUT.xlsx"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-11-12T16:54:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						15
+					],
+					"hours": [
+						19
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,39 @@
+{
+	"name": "MIDI Market Share Extractor",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"MIDI",
+			"Marketshare"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "SFE_MarketShareExtractor",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mmka": "MIDI"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-05-20T15:56:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						18
+					]
+				}
+			}
+		}
+	}
+}

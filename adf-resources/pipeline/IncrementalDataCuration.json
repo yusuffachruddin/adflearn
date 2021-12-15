@@ -1,0 +1,105 @@
+{
+	"name": "IncrementalDataCuration",
+	"properties": {
+		"activities": [
+			{
+				"name": "Incremental Curation Data Pipeline",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "testProperty",
+						"value": "testProperty_value"
+					}
+				],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Delta Table Pipeline OneSource",
+					"baseParameters": {
+						"container": {
+							"value": "@pipeline().parameters.container",
+							"type": "Expression"
+						},
+						"database": {
+							"value": "@pipeline().parameters.database",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@pipeline().parameters.table_list",
+							"type": "Expression"
+						},
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"full_dir": {
+							"value": "@pipeline().parameters.full_dir",
+							"type": "Expression"
+						},
+						"daily_dir": {
+							"value": "@pipeline().parameters.daily_dir",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"sf_credential": {
+							"value": "@variables('sf_credential')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"container": {
+				"type": "string",
+				"defaultValue": "raw"
+			},
+			"database": {
+				"type": "string",
+				"defaultValue": "ts-mmka"
+			},
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"table_list": {
+				"type": "string",
+				"defaultValue": "['dboDim_Area_GeoCity.csv', 'dboDim_Area.csv', 'dboDim_Brand.csv', 'dboDim_Customer_Distributor.csv', 'dboDim_Distributor.csv', 'dboDim_Period.csv', 'dboDim_Product.csv', 'dboDim_Type.csv', 'dboFact_Sales_Target_SS.csv', 'dboFact_Stock_Retailer_SellingIn_Return.csv', 'dboFact_Stock_Retailer_ServiceLevel.csv', 'dboFact_Stock_Retailer.csv']"
+			},
+			"full_dir": {
+				"type": "string",
+				"defaultValue": "/ts-mmka/fact-master-references/full/"
+			},
+			"daily_dir": {
+				"type": "string",
+				"defaultValue": "/ts-mmka/fact-master-references/daily/"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"sf_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

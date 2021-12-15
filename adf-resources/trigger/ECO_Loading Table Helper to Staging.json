@@ -1,0 +1,44 @@
+{
+	"name": "ECO_Loading Table Helper to Staging",
+	"properties": {
+		"description": "This trigger is set up to schedule data loading for ecommerce table helper. There are three tables that are going to be loaded (['MAPPING_AREA_ALFACART.xlsx', 'MAPPING_CUSTOMER_ALFACART.xlsx', 'MAPPING_CUSTOMER_ECOMMERCE.xlsx']). The data was taken from raw container /raw/ts-ecommerce/MAPPING/ into curation container using ManualsDataCuration pipeline, and then load to staging through DatalakeToStaging pipeline. The job is is supposed to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "STAGING",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['MAPPING_AREA_ALFACART.xlsx', 'MAPPING_CUSTOMER_ALFACART.xlsx', 'MAPPING_CUSTOMER_ECOMMERCE.xlsx']"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-11-01T10:25:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						25
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

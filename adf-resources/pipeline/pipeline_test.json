@@ -1,0 +1,69 @@
+{
+	"name": "pipeline_test",
+	"properties": {
+		"activities": [
+			{
+				"name": "Notebook1",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SMART_BLITZ/GENERAL/nb_test_pipeline"
+				},
+				"linkedServiceName": {
+					"referenceName": "IDN_SFE_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "process_dimension",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/SMART_BLITZ/REFERENCE/nb_dimensions_smartblitz",
+					"baseParameters": {
+						"dateTimestamp": {
+							"value": "@formatDateTime(\naddDays(\nconvertFromUtc(utcnow(), 'SE Asia Standard Time'),\npipeline().parameters.DayofStart),\n'yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "IDN_SFE_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"DayofStart": {
+				"type": "int",
+				"defaultValue": 0
+			},
+			"jobName": {
+				"type": "string",
+				"defaultValue": "pl_process_DimandFact"
+			}
+		},
+		"folder": {
+			"name": "smart_blitz"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-14T06:19:18Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

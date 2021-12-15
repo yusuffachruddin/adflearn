@@ -1,0 +1,47 @@
+{
+	"name": "Datalake Path to Staging LKA",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"LKA",
+			"PARETO",
+			"DatalakePathToStaging"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "lka_sellout_stock",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "manuals"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-21T21:06:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						45
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}

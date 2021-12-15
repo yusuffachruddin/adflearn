@@ -1,0 +1,45 @@
+{
+	"name": "ECO_Loading Data Curation to Prod_STG",
+	"properties": {
+		"description": "This trigger is to run job for loading E-Commerce data from curated to DEV_IDN staging (from curated/dss-sfe/data-curation/data/manuals/ to DEV_IDN Staging in Snowflake. The trigger was set to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "IDN_STG_ECO",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['ECOMMERCE_ALFACART_SELLOUT.xlsx', 'ECOMMERCE_BRICKANDCLICK_SELLOUT_STOCK.xlsx', 'ECOMMERCE_SELLOUT_STOCK.xlsx']",
+					"source_system_trigram": "ECO"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-29T06:00:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						50
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

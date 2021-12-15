@@ -1,0 +1,60 @@
+{
+	"name": "ECO KlikIDM Staging",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "ecommerce_klikidm_sellout",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "ecommerce"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "ecommerce_klikidm_sellout",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "ecommerce",
+					"source_system": "ECO",
+					"schema": "IDN_STG_ECO"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-11-12T17:03:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						40
+					],
+					"hours": [
+						19
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,51 @@
+{
+	"name": "Loading Core Plain",
+	"properties": {
+		"annotations": [
+			"Core",
+			"Plain",
+			"PRD",
+			"DEV_IDN"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "StagingToCore",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"transformation_logic": "/dbfs/mnt/curated/dss-sfe/configs/sfe_transformation_logic.csv"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "StagingToCoreProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"transformation_logic": "/dbfs/mnt/curated/dss-sfe/configs/sfe_transformation_logic_devidn.csv"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-01T04:49:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						40
+					],
+					"hours": [
+						1
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"name": "DAN-AP-T-ADF800-Spoke-IDN-SFE-Analytical",
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "4f5a5c04-72b1-4191-bdd7-0aac256a1e80",
+		"tenantId": "4720ed5e-c545-46eb-99a5-958dd333e9f2"
+	}
+}

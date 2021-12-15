@@ -1,0 +1,39 @@
+{
+	"name": "MTI Curation Table Helper Schedule",
+	"properties": {
+		"description": "This trigger is set up to schedule data loading for MTI table helper. There are three tables that are going to be loaded (['MappingArea_MTI.xlsx', 'MappingProduct_MTI.xlsx', 'Master_Customer_MTI.xlsx']). The data was taken from raw container /raw/ts-mti/master/ into curation container. The job supposed to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ManualsDataCuration",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_list": "['MappingArea_MTI.xlsx', 'MappingProduct_MTI.xlsx', 'Master_Customer_MTI.xlsx']",
+					"blob_path": "/raw/ts-mti/master/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-04T09:03:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						13
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

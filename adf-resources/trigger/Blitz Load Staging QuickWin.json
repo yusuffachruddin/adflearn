@@ -1,0 +1,61 @@
+{
+	"name": "Blitz Load Staging QuickWin",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "tsmmka",
+					"sf_schema": "IDN_STG_BTZ",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['dboFact_Purchase_Order.csv', 'dboFact_Return.csv', 'dboFact_Sales.csv', 'dboFact_Stock.csv']",
+					"source_system_trigram": "BTZ"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "tsmmka",
+					"sf_schema": "STAGING",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['dboFact_Purchase_Order.csv', 'dboFact_Return.csv', 'dboFact_Sales.csv', 'dboFact_Stock.csv']"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-12-04T22:26:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						20
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "AzureDatabricksIDNSpokeSmall",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-4483926891468732.12.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/6cb2ef62-2476-47e6-92ad-728710c0c19e/resourceGroups/DAN-AP-T-RSG800-Spoke-IDN-Databricks-DS/providers/Microsoft.Databricks/workspaces/DAN-AP-T-DBR800-IDN-Spoke-DS",
+			"newClusterNodeType": "Standard_DS3_v2",
+			"newClusterNumOfWorker": "1",
+			"newClusterSparkEnvVars": {
+				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+			},
+			"newClusterVersion": "8.4.x-scala2.12",
+			"newClusterInitScripts": []
+		}
+	}
+}

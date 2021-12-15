@@ -1,0 +1,64 @@
+{
+	"name": "SFE_Ecommerce_KlikIDM_Extractor",
+	"properties": {
+		"activities": [
+			{
+				"name": "KlikIDM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Ecommerce KlikIDM Extractor",
+					"baseParameters": {
+						"file_excel": {
+							"value": "@pipeline().parameters.filename",
+							"type": "Expression"
+						},
+						"input_date": {
+							"value": "@formatDateTime(subtractFromTime(addhours(utcnow(), 7), 1, 'Day'),'yyyyMMdd')",
+							"type": "Expression"
+						},
+						"private_key": {
+							"value": "@variables('private_key')",
+							"type": "Expression"
+						},
+						"sf_credential": {
+							"value": "@variables('sf_credential')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"filename": {
+				"type": "string",
+				"defaultValue": "ECOMMERCE_KLIKDM_SELLOUT.xlsx"
+			}
+		},
+		"variables": {
+			"private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"sf_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential.json"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

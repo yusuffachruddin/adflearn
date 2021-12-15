@@ -1,0 +1,632 @@
+{
+	"name": "IDN_DMT_SFE_SingleQueryCoreLoading_Helper_Table",
+	"properties": {
+		"description": "Run query at Snowflake at once",
+		"activities": [
+			{
+				"name": "R_BTZ_CUS_MCD",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_CUS_MCD')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_DIS_MCM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_DIS_MCM')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksIDNSpoke",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_DIS_DAT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_DIS_DAT')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_DIS_MAM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_DIS_MAM')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_DIS_MPM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_DIS_MPM')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_MLK_MPD",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_MLK_MPD')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_OTH_AIV",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_OTH_AIV')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_OTH_UOM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_OTH_UOM')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_PUR_PRC",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_PUR_PRC')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_BTZ_DIS_MDA",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_BTZ_DIS_MDA')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_ECO_MAP_MAA",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_ECO_MAP_MAA')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_ECO_MAP_MCA",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_ECO_MAP_MCA')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "R_ECO_MAP_MCE",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/arief.rachman1@danone.com/Snowbook",
+					"baseParameters": {
+						"use_case": {
+							"value": "@pipeline().parameters.use_case",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"private_key_file": {
+							"value": "@variables('rsa_private_key')",
+							"type": "Expression"
+						},
+						"credential_file": {
+							"value": "@variables('db_credential')",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@variables('R_ECO_MAP_MCE')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksToken",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"use_case": {
+				"type": "string",
+				"defaultValue": "dss-sfe"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "IDN_DMT_SFE"
+			}
+		},
+		"variables": {
+			"rsa_private_key": {
+				"type": "String",
+				"defaultValue": "sf_private.key"
+			},
+			"db_credential": {
+				"type": "String",
+				"defaultValue": "sf_credential_sfe_idn.json"
+			},
+			"R_BTZ_CUS_MCD": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_CUS_MCD dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:DistributorCd::NUMBER(38, \t\t0) AS DIS, \t\tVALUE:RowId::NUMBER(38, \t\t0) AS \"ROW\", \t\tVALUE:process_date::TIMESTAMPNTZ AS PRO_DAT, \t\tVALUE:process_datetime::VARCHAR AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:DistributorCustomerCd::VARCHAR AS IST, \t\tVALUE:DistributorCustomerDesc::VARCHAR AS STR, \t\tVALUE:NISOutletCd::VARCHAR AS NIS, \t\tVALUE:NISOutletDesc::VARCHAR AS ISO, \t\tVALUE:SubAccountCd::VARCHAR AS SUB, \t\tVALUE:UploadBy::VARCHAR AS UPL, \t\tVALUE:UploadFileName::VARCHAR AS PLO, \t\tVALUE:UploadTime::VARCHAR AS LOA \tFROM \t\tIDN_STG_TSM.S_BTZ_MAPPINGCUSTOMERDISTRIBUTOR \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_MAPPINGCUSTOMERDISTRIBUTOR)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY Dis, \t\tist, \t\tstr, \t\tSub, \t\tNIS, \t\tISO \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.DIS = source.DIS \tAND dest.IST = source.IST \tAND dest.STR = source.STR \tAND dest.SUB = source.SUB \tAND dest.NIS = source.NIS \tAND dest.ISO = source.ISO \tWHEN MATCHED THEN UPDATE SET \tdest.DIS = source.DIS, \tdest.\"ROW\" = source.\"ROW\", \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.IST = source.IST, \tdest.STR = source.STR, \tdest.NIS = source.NIS, \tdest.ISO = source.ISO, \tdest.SUB = source.SUB, \tdest.UPL = source.UPL, \tdest.PLO = source.PLO, \tdest.LOA = source.LOA \tWHEN NOT MATCHED THEN INSERT \t( dest.DIS, \tdest.\"ROW\", \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.IST, \tdest.STR, \tdest.NIS, \tdest.ISO, \tdest.SUB, \tdest.UPL, \tdest.PLO, \tdest.LOA) VALUES( source.DIS, source.\"ROW\", source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.IST, source.STR, source.NIS, source.ISO, source.SUB, source.UPL, source.PLO, source.LOA);"
+			},
+			"R_BTZ_DIS_DAT": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_DIS_DAT dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:Distributor_Area_Type_Key::NUMBER(38, \t\t0) AS DIS_ARE_TYP_KEY, \t\tVALUE:Source_System_Code::NUMBER(38, \t\t0) AS SOU_SYS_COD, \t\tVALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_TZ AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:Create_Timestamp::VARCHAR AS CRE_TIM, \t\tVALUE:Distributor_Area_Type_Code::VARCHAR AS DIS_ARE_TYP_COD, \t\tVALUE:Distributor_Area_Type_Desc::VARCHAR AS DIS_ARE_TYP_DES, \t\tVALUE:Update_Timestamp::VARCHAR AS UPD_TIM, \t\tVALUE:Upload_Date::VARCHAR AS UPL_DAT \tFROM \t\tIDN_STG_TSM.S_BTZ_DIM_DISTRIBUTOR_AREA_TYPE \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_DIM_DISTRIBUTOR_AREA_TYPE)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY Dis_Are_Typ_Key, \t\tDis_Are_Typ_Cod, \t\tDis_Are_Typ_Des, \t\tSou_Sys_Cod \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.DIS_ARE_TYP_KEY = source.DIS_ARE_TYP_KEY \tAND dest.DIS_ARE_TYP_COD = source.DIS_ARE_TYP_COD \tAND dest.DIS_ARE_TYP_DES = source.DIS_ARE_TYP_DES \tAND dest.SOU_SYS_COD = source.SOU_SYS_COD \tWHEN MATCHED THEN UPDATE SET \tdest.DIS_ARE_TYP_KEY = source.DIS_ARE_TYP_KEY, \tdest.SOU_SYS_COD = source.SOU_SYS_COD, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.CRE_TIM = source.CRE_TIM, \tdest.DIS_ARE_TYP_COD = source.DIS_ARE_TYP_COD, \tdest.DIS_ARE_TYP_DES = source.DIS_ARE_TYP_DES, \tdest.UPD_TIM = source.UPD_TIM, \tdest.UPL_DAT = source.UPL_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.DIS_ARE_TYP_KEY, \tdest.SOU_SYS_COD, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.CRE_TIM, \tdest.DIS_ARE_TYP_COD, \tdest.DIS_ARE_TYP_DES, \tdest.UPD_TIM, \tdest.UPL_DAT) VALUES( source.DIS_ARE_TYP_KEY, source.SOU_SYS_COD, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.CRE_TIM, source.DIS_ARE_TYP_COD, source.DIS_ARE_TYP_DES, source.UPD_TIM, source.UPL_DAT);"
+			},
+			"R_BTZ_DIS_MAM": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_DIS_MAM dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:distributorareacd::NUMBER(38, \t\t0) AS DIS, \t\tVALUE:distributorcd::NUMBER(38, \t\t0) AS IST, \t\tVALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_TZ AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:distributorareadesc::VARCHAR AS STR, \t\tVALUE:storecode::VARCHAR AS STO, \t\tVALUE:storename::VARCHAR AS TOR \tFROM \t\tIDN_STG_TSM.S_MTI_MAPPINGAREA_MTI \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_MTI_MAPPINGAREA_MTI)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY dis, \t\tstr, \t\tist, \t\tsto, \t\ttor \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.DIS = source.DIS \tAND dest.STR = source.STR \tAND dest.IST = source.IST \tAND dest.STO = source.STO \tAND dest.TOR = source.TOR \tWHEN MATCHED THEN UPDATE SET \tdest.DIS = source.DIS, \tdest.IST = source.IST, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.STR = source.STR, \tdest.STO = source.STO, \tdest.TOR = source.TOR \tWHEN NOT MATCHED THEN INSERT \t( dest.DIS, \tdest.IST, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.STR, \tdest.STO, \tdest.TOR) VALUES( source.DIS, source.IST, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.STR, source.STO, source.TOR);"
+			},
+			"R_BTZ_DIS_MCM": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_DIS_MCM dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_TZ AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:nama_blitz::VARCHAR AS NAM_BLI, \t\tVALUE:nama_ft::VARCHAR AS NAM_FTX, \t\tVALUE:program::VARCHAR AS PRO, \t\tVALUE:storecode::VARCHAR AS STO \tFROM \t\tIDN_STG_TSM.S_MTI_MASTER_CUSTOMER_MTI \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_MTI_MASTER_CUSTOMER_MTI) \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY nam_bli, \t\tnam_ftx, \t\tpro, \t\tsto \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.NAM_BLI = source.NAM_BLI \tAND dest.NAM_FTX = source.NAM_FTX \tAND dest.PRO = source.PRO \tAND dest.STO = source.STO \tWHEN MATCHED THEN UPDATE SET \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.NAM_BLI = source.NAM_BLI, \tdest.NAM_FTX = source.NAM_FTX, \tdest.PRO = source.PRO, \tdest.STO = source.STO \tWHEN NOT MATCHED THEN INSERT \t( dest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.NAM_BLI, \tdest.NAM_FTX, \tdest.PRO, \tdest.STO) VALUES( source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.NAM_BLI, source.NAM_FTX, source.PRO, source.STO);"
+			},
+			"R_BTZ_DIS_MPM": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_DIS_MPM dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:distributorcd::NUMBER(38, \t\t0) AS DIS, \t\tVALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_TZ AS PRO_ATE, \t\tVALUE:skucd::VARCHAR AS SKU, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:materialcd::VARCHAR AS MAT \tFROM \t\tIDN_STG_TSM.S_MTI_MAPPINGPRODUCT_MTI \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_MTI_MAPPINGPRODUCT_MTI)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY dis, \t\tmat, \t\tsku \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.DIS = source.DIS \tAND dest.MAT = source.MAT \tAND dest.SKU = source.SKU \tWHEN MATCHED THEN UPDATE SET \tdest.DIS = source.DIS, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.SKU = source.SKU, \tdest.PAR_DAT = source.PAR_DAT, \tdest.MAT = source.MAT \tWHEN NOT MATCHED THEN INSERT \t( dest.DIS, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.SKU, \tdest.PAR_DAT, \tdest.MAT) VALUES( source.DIS, source.PRO_DAT, source.PRO_ATE, source.SKU, source.PAR_DAT, source.MAT);"
+			},
+			"R_BTZ_MLK_MPD": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_MLK_MPD dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:DistributorCd::VARCHAR AS DIS, \t\tVALUE:RowId::NUMBER(38, \t\t0) AS \"ROW\", \t\tVALUE:SKUCd::VARCHAR AS SKU, \t\tVALUE:process_date::TIMESTAMP_NTZ AS PRO_DAT, \t\tVALUE:process_datetime::VARCHAR AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:MaterialCd::VARCHAR AS MAT, \t\tVALUE:UploadBy::VARCHAR AS UPL, \t\tVALUE:UploadFileName::VARCHAR AS PLO, \t\tVALUE:UploadTime::VARCHAR AS LOA \tFROM \t\tIDN_STG_TSM.S_BTZ_MAPPINGPRODUCT \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_MAPPINGPRODUCT)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY \"ROW\", \t\tSKU, \t\tDis, \t\tMat \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.\"ROW\" = source.\"ROW\" \tAND dest.SKU = source.SKU \tAND dest.DIS = source.DIS \tAND dest.MAT = source.MAT \tWHEN MATCHED THEN UPDATE SET \tdest.DIS = source.DIS, \tdest.\"ROW\" = source.\"ROW\", \tdest.SKU = source.SKU, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.MAT = source.MAT, \tdest.UPL = source.UPL, \tdest.PLO = source.PLO, \tdest.LOA = source.LOA \tWHEN NOT MATCHED THEN INSERT \t( dest.DIS, \tdest.\"ROW\", \tdest.SKU, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.MAT, \tdest.UPL, \tdest.PLO, \tdest.LOA) VALUES( source.DIS, source.\"ROW\", source.SKU, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.MAT, source.UPL, source.PLO, source.LOA);"
+			},
+			"R_BTZ_OTH_AIV": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_OTH_AIV dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:distributor_id::NUMBER(38, \t\t0) AS DIS_IDX, \t\tVALUE:process_date::NUMBER(38, \t\t0) AS PRO_DAT, \t\tVALUE:process_datetime::TIMESTAMP_TZ AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:channel::VARCHAR AS CHA, \t\tVALUE:generatedbranch_id::VARCHAR AS GEN_IDX, \t\tVALUE:patch_to::VARCHAR AS PAT_TOX \tFROM \t\tIDN_STG_TSM.S_MKA_ACCOUNT_INTERVENTION \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_MKA_ACCOUNT_INTERVENTION)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY cha, \t\tdis_idx, \t\tgen_idx, \t\tpat_tox \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.CHA = source.CHA \tAND dest.DIS_IDX = source.DIS_IDX \tAND dest.GEN_IDX = source.GEN_IDX \tAND dest.PAT_TOX = source.PAT_TOX \tWHEN MATCHED THEN UPDATE SET \tdest.DIS_IDX = source.DIS_IDX, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.CHA = source.CHA, \tdest.GEN_IDX = source.GEN_IDX, \tdest.PAT_TOX = source.PAT_TOX \tWHEN NOT MATCHED THEN INSERT \t( dest.DIS_IDX, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.CHA, \tdest.GEN_IDX, \tdest.PAT_TOX) VALUES( source.DIS_IDX, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.CHA, source.GEN_IDX, source.PAT_TOX);"
+			},
+			"R_BTZ_OTH_UOM": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_OTH_UOM dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:RowId::NUMBER(38, \t\t0) AS \"ROW\", \t\tVALUE:SKUCd::VARCHAR AS SKU, \t\tVALUE:in400Gr::NUMBER(38, \t\t8) AS IN4, \t\tVALUE:inCAR::NUMBER(38, \t\t8) AS INC, \t\tVALUE:inCBM::NUMBER(38, \t\t8) AS NCB, \t\tVALUE:inKG::NUMBER(38, \t\t8) AS INK, \t\tVALUE:inPCS::NUMBER(38, \t\t8) AS INP, \t\tVALUE:inTON::NUMBER(38, \t\t8) AS INT, \t\tVALUE:process_date::TIMESTAMP_TZ AS PRO_DAT, \t\tVALUE:process_datetime::VARCHAR AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:UploadBy::VARCHAR AS UPL, \t\tVALUE:UploadFileName::VARCHAR AS PLO, \t\tVALUE:UploadTime::VARCHAR AS LOA \tFROM \t\tIDN_STG_TSM.S_BTZ_UOMCONVERSION \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_UOMCONVERSION)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY \"ROW\", \t\tSKU \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.\"ROW\" = source.\"ROW\" \tAND dest.SKU = source.SKU \tWHEN MATCHED THEN UPDATE SET \tdest.\"ROW\" = source.\"ROW\", \tdest.SKU = source.SKU, \tdest.IN4 = source.IN4, \tdest.INC = source.INC, \tdest.NCB = source.NCB, \tdest.INK = source.INK, \tdest.INP = source.INP, \tdest.INT = source.INT, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.UPL = source.UPL, \tdest.PLO = source.PLO, \tdest.LOA = source.LOA \tWHEN NOT MATCHED THEN INSERT \t( dest.\"ROW\", \tdest.SKU, \tdest.IN4, \tdest.INC, \tdest.NCB, \tdest.INK, \tdest.INP, \tdest.INT, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.UPL, \tdest.PLO, \tdest.LOA) VALUES( source.\"ROW\", source.SKU, source.IN4, source.INC, source.NCB, source.INK, source.INP, source.INT, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.UPL, source.PLO, source.LOA);"
+			},
+			"R_BTZ_PUR_PRC": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_PUR_PRC dest \t\tUSING ( \tSELECT \t\tDISTINCT VALUE:DBP::NUMBER(38, \t\t8) AS DBP, \t\tVALUE:DistributorCd::NUMBER(38, \t\t0) AS DIS, \t\tVALUE:RBP::NUMBER(38, \t\t8) AS RBP, \t\tVALUE:RowId::NUMBER(38, \t\t0) AS \"ROW\", \t\tVALUE:SKUCd::VARCHAR AS SKU, \t\tVALUE:nMonth::NUMBER(38, \t\t0) AS NMO, \t\tVALUE:nYear::NUMBER(38, \t\t0) AS NYE, \t\tVALUE:process_date::TIMESTAMP_TZ AS PRO_DAT, \t\tVALUE:process_datetime::VARCHAR AS PRO_ATE, \t\tPARTITION_DATE::VARCHAR AS PAR_DAT, \t\tVALUE:UploadBy::VARCHAR AS UPL, \t\tVALUE:UploadFileName::VARCHAR AS PLO, \t\tVALUE:UploadTime::VARCHAR AS LOA \tFROM \t\tIDN_STG_TSM.S_BTZ_PRICE \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tIDN_STG_TSM.S_BTZ_PRICE)  \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY \"ROW\", \t\tDis, \t\tnMo, \t\tnYe \tORDER BY \t\tPARTITION_DATE DESC) = 1 ) SOURCE ON \tdest.\"ROW\" = source.\"ROW\" \tAND dest.DIS = source.DIS \tAND dest.NMO = source.NMO \tAND dest.NYE = source.NYE \tWHEN MATCHED THEN UPDATE SET \tdest.DBP = source.DBP, \tdest.DIS = source.DIS, \tdest.RBP = source.RBP, \tdest.\"ROW\" = source.\"ROW\", \tdest.SKU = source.SKU, \tdest.NMO = source.NMO, \tdest.NYE = source.NYE, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PAR_DAT = source.PAR_DAT, \tdest.UPL = source.UPL, \tdest.PLO = source.PLO, \tdest.LOA = source.LOA \tWHEN NOT MATCHED THEN INSERT \t( dest.DBP, \tdest.DIS, \tdest.RBP, \tdest.\"ROW\", \tdest.SKU, \tdest.NMO, \tdest.NYE, \tdest.PRO_DAT, \tdest.PRO_ATE, \tdest.PAR_DAT, \tdest.UPL, \tdest.PLO, \tdest.LOA) VALUES( source.DBP, source.DIS, source.RBP, source.\"ROW\", source.SKU, source.NMO, source.NYE, source.PRO_DAT, source.PRO_ATE, source.PAR_DAT, source.UPL, source.PLO, source.LOA);"
+			},
+			"R_BTZ_DIS_MDA": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_BTZ_DIS_MDA dest \t\tUSING ( \tSELECT \t\tVALUE:RowId::number(38, \t\t0) RID, \t\tVALUE:DistributorAreaCd::VARCHAR DIS_ARE_COD, \t\tVALUE:DistributorAreaTypeCd::VARCHAR DIS_ARE_TYP_COD, \t\tVALUE:DistributorCd::number(38, \t\t0) DIS, \t\tVALUE:process_date::VARCHAR PRO_ATE, \t\tVALUE:process_datetime::TIMESTAMP_TZ PRO_DAT, \t\tPARTITION_DATE AS PAR_DAT \tFROM \t\tDEV_IDN.IDN_STG_TSM.S_BTZ_MAPPINGDISTRIBUTORAREATYPE \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tDEV_IDN.IDN_STG_TSM.S_BTZ_MAPPINGDISTRIBUTORAREATYPE ) \t\t\tQUALIFY ROW_NUMBER() OVER (PARTITION BY DIS_ARE_COD, \t\tDIS_ARE_TYP_COD, \t\tDIS \tORDER BY \t\tPRO_DAT DESC) = 1) SOURCE ON \tdest.DIS_ARE_COD = source.DIS_ARE_COD \tAND dest.DIS_ARE_TYP_COD = source.DIS_ARE_TYP_COD \tAND dest.DIS = source.DIS \tWHEN MATCHED THEN UPDATE SET \tdest.RID = source.RID, \tdest.DIS_ARE_COD = source.DIS_ARE_COD, \tdest.DIS_ARE_TYP_COD = source.DIS_ARE_TYP_COD, \tdest.DIS = source.DIS, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.RID, \tdest.DIS_ARE_COD, \tdest.DIS_ARE_TYP_COD, \tdest.DIS, \tdest.PRO_ATE, \tdest.PRO_DAT, \tdest.PAR_DAT ) VALUES( source.RID, source.DIS_ARE_COD, source.DIS_ARE_TYP_COD, source.DIS, source.PRO_ATE, source.PRO_DAT, source.PAR_DAT );"
+			},
+			"R_ECO_MAP_MAA": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_ECO_MAP_MAA dest \t\tUSING ( \tSELECT \t\tVALUE:branch_name::VARCHAR BRA_NAM, \t\tVALUE:patch_branch_name::VARCHAR PAT_BRA_NAM, \t\tVALUE:process_date::VARCHAR PRO_ATE, \t\tVALUE:process_datetime::TIMESTAMP_TZ PRO_DAT, \t\tPARTITION_DATE AS PAR_DAT \tFROM \t\tDEV_IDN.IDN_STG_TSM.S_ECO_MAPPING_AREA_ALFACART \tWHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tDEV_IDN.IDN_STG_TSM.S_BTZ_MAPPINGDISTRIBUTORAREATYPE ) QUALIFY ROW_NUMBER() OVER (PARTITION BY BRA_NAM, \t\tPAT_BRA_NAM \tORDER BY \t\tPRO_DAT DESC) = 1) SOURCE ON \tdest.BRA_NAM = source.BRA_NAM \tAND dest.PAT_BRA_NAM = source.PAT_BRA_NAM \tWHEN MATCHED THEN UPDATE SET \tdest.BRA_NAM = source.BRA_NAM, \tdest.PAT_BRA_NAM = source.PAT_BRA_NAM, \tdest.PRO_ATE = source.PRO_ATE, \tdest.PRO_DAT = source.PRO_DAT, \tdest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t( dest.BRA_NAM, \tdest.PAT_BRA_NAM, \tdest.PRO_ATE, \tdest.PRO_DAT, \tdest.PAR_DAT ) VALUES( source.BRA_NAM, source.PAT_BRA_NAM, source.PRO_ATE, source.PRO_DAT, source.PAR_DAT );"
+			},
+			"R_ECO_MAP_MCA": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_ECO_MAP_MCA dest \t\tUSING ( \tSELECT         VALUE:application::VARCHAR APP,        VALUE:customer_distributor_code::VARCHAR CUS_DIS_COD,        VALUE:customer_distributor_des::VARCHAR CUS_DIS_DES,        VALUE:sub_account_desc::VARCHAR SUB_ACC_DES,        VALUE:process_date::VARCHAR PRO_ATE,        VALUE:process_datetime::timestamp_tz PRO_DAT,        PARTITION_DATE AS PAR_DAT               FROM DEV_IDN.IDN_STG_TSM.S_ECO_MAPPING_CUSTOMER_ALFACART WHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tDEV_IDN.IDN_STG_TSM.S_ECO_MAPPING_CUSTOMER_ALFACART )  QUALIFY ROW_NUMBER() OVER (PARTITION BY                             APP, CUS_DIS_COD, CUS_DIS_DES, SUB_ACC_DES                            ORDER BY PRO_DAT DESC) = 1) SOURCE ON \tdest.APP = source.APP \tAND dest.CUS_DIS_COD = source.CUS_DIS_COD \tAND dest.CUS_DIS_DES = source.CUS_DIS_DES     AND dest.SUB_ACC_DES = source.SUB_ACC_DES \tWHEN MATCHED THEN UPDATE SET dest.APP = source.APP, dest.CUS_DIS_COD = source.CUS_DIS_COD, dest.CUS_DIS_DES = source.CUS_DIS_DES, dest.SUB_ACC_DES = source.SUB_ACC_DES, dest.PRO_ATE = source.PRO_ATE, dest.PRO_DAT = source.PRO_DAT, dest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t(  dest.APP, dest.CUS_DIS_COD, dest.CUS_DIS_DES, dest.SUB_ACC_DES, dest.PRO_ATE, dest.PRO_DAT, dest.PAR_DAT) VALUES(  source.APP, source.CUS_DIS_COD, source.CUS_DIS_DES, source.SUB_ACC_DES, source.PRO_ATE, source.PRO_DAT, source.PAR_DAT );"
+			},
+			"R_ECO_MAP_MCE": {
+				"type": "String",
+				"defaultValue": "MERGE INTO \tIDN_DMT_SFE.R_ECO_MAP_MCE dest \t\tUSING ( \tSELECT         VALUE:store_id::VARCHAR STO_IDX,        VALUE:store_name::VARCHAR STO_NAM,        VALUE:store_ori_dc::VARCHAR STO_ORI_DCX,        VALUE:sub_account_desc::VARCHAR SUB_ACC_DES,        VALUE:process_date::VARCHAR PRO_ATE,        VALUE:process_datetime::timestamp_tz PRO_DAT,        PARTITION_DATE AS PAR_DAT               FROM DEV_IDN.IDN_STG_TSM.S_ECO_MAPPING_CUSTOMER_ECOMMERCE WHERE \t\tPARTITION_DATE = ( \t\tSELECT \t\t\tMAX(PARTITION_DATE) \t\tFROM \t\t\tDEV_IDN.IDN_STG_TSM.S_ECO_MAPPING_CUSTOMER_ECOMMERCE )  QUALIFY ROW_NUMBER() OVER (PARTITION BY                             STO_IDX, STO_NAM, STO_ORI_DCX, SUB_ACC_DES                            ORDER BY PRO_DAT DESC) = 1) SOURCE ON \tdest.STO_IDX = source.STO_IDX \tAND dest.STO_NAM = source.STO_NAM \tAND dest.STO_ORI_DCX = source.STO_ORI_DCX     AND dest.SUB_ACC_DES = source.SUB_ACC_DES \tWHEN MATCHED THEN UPDATE SET dest.STO_IDX = source.STO_IDX, dest.STO_NAM = source.STO_NAM, dest.STO_ORI_DCX = source.STO_ORI_DCX, dest.SUB_ACC_DES = source.SUB_ACC_DES, dest.PRO_ATE = source.PRO_ATE, dest.PRO_DAT = source.PRO_DAT, dest.PAR_DAT = source.PAR_DAT \tWHEN NOT MATCHED THEN INSERT \t(  dest.STO_IDX, dest.STO_NAM, dest.STO_ORI_DCX, dest.SUB_ACC_DES, dest.PRO_ATE, dest.PRO_DAT, dest.PAR_DAT ) VALUES(  source.STO_IDX, source.STO_NAM, source.STO_ORI_DCX, source.SUB_ACC_DES, source.PRO_ATE, source.PRO_DAT, source.PAR_DAT );"
+			}
+		},
+		"annotations": [
+			"SFE",
+			"CORE"
+		],
+		"lastPublishTime": "2021-12-04T22:31:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

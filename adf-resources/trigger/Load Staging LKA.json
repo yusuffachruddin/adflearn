@@ -1,0 +1,49 @@
+{
+	"name": "Load Staging LKA",
+	"properties": {
+		"annotations": [
+			"SFE",
+			"LKA",
+			"PARETO",
+			"DatalakePathToStagingProd"
+		],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakePathToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"table_storage": "lka_sellout_stock",
+					"mode": "external",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage": "sfe_stage",
+					"blob": "manuals",
+					"source_system": "LKA",
+					"schema": "IDN_STG_LKA"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-21T21:17:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						40
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}

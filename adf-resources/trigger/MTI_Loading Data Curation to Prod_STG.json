@@ -1,0 +1,45 @@
+{
+	"name": "MTI_Loading Data Curation to Prod_STG",
+	"properties": {
+		"description": "This trigger is to run job for loading MTI data from curated to staging (from curated/dss-sfe/data-curation/data/manuals/mti_sellout_stock to Staging in Snowflake. The trigger was set to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStagingProd",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "IDN_STG_MTI",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe_parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['MTI_Sellout_Stock.xlsx']",
+					"source_system_trigram": "MTI"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-09-29T03:17:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						25
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,37 @@
+{
+	"name": "Datamart TS MTI Schedule",
+	"properties": {
+		"description": "This trigger is to set schedule run to load TS MTI data from staging to dev_idn dmt. The data source is from manual data load through sftp and processed to staging.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Datamart_TS_MTI",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"use_case": "dss-sfe",
+					"schema": "IDN_DMT_SFE"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-23T17:12:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

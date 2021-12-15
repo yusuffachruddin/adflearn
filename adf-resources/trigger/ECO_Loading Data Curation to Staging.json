@@ -1,0 +1,44 @@
+{
+	"name": "ECO_Loading Data Curation to Staging",
+	"properties": {
+		"description": "This trigger is to run job for loading -commerce data from curated to staging (from curated/dss-sfe/data-curation/data/manuals/ to Staging in Snowflake. The trigger was set to run daily.",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DatalakeToStaging",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"mode": "external",
+					"blob": "manuals",
+					"sf_schema": "STAGING",
+					"use_case": "dss-sfe",
+					"container": "curated",
+					"file_format": "sfe-parquet",
+					"storage_integration": "dev_spoke_apac_uc_sfe",
+					"stage_name": "sfe_stage",
+					"table_list": "['ECOMMERCE_ALFACART_SELLOUT.xlsx', 'ECOMMERCE_BRICKANDCLICK_SELLOUT_STOCK.xlsx', 'ECOMMERCE_SELLOUT_STOCK.xlsx']"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-10-29T06:40:00",
+				"timeZone": "SE Asia Standard Time",
+				"schedule": {
+					"minutes": [
+						50
+					],
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}
